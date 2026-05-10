@@ -165,7 +165,11 @@ async def get_live_recommendation():
             
     payload.road_context.road_grade_percent = latest_calculated_grade
         
-    return get_recommendation(payload)
+    result = get_recommendation(payload)
+    result["lat"] = latest_location.lat
+    result["lon"] = latest_location.lon
+    return result
+
 
 @app.post("/location/update")
 def update_location(loc: LocationInput):

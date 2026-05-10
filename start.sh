@@ -77,6 +77,34 @@ else
 fi
 cd ..
 
+# 4. Start Arduino Bridge (optional — skips if no Arduino detected)
+ARDUINO_PORT=$(python -c "
+import serial.tools.list_ports, sys
+ports = list(serial.tools.list_ports.comports())
+for p in ports:
+    d = (p.description or '').lower()
+    h = (p.hwid or '').lower()
+    if 'arduino' in d or 'uno' in d or '2341' in h:
+        print(p.device); sys.exit(0)
+for p in ports:
+    if 'bluetooth' not in (p.description or '').lower():
+        print(p.device); sys.exit(0)
+" 2>/dev/null)
+
+if [ -n "$ARDUINO_PORT" ]; then
+    if [ "$DEBUG_MODE" = true ]; then
+        echo -e "\033[1;37m[START] Arduino Bridge (${ARDUINO_PORT})...\033[0m"
+        python arduino/bridge.py --port "$ARDUINO_PORT" &
+    else
+        echo -ne "\033[1;37m[START] Arduino Bridge (${ARDUINO_PORT})...\033[0m"
+        python arduino/bridge.py --port "$ARDUINO_PORT" > /dev/null 2>&1 &
+        sleep 1
+        echo -e " \033[1;32m[OK]\033[0m"
+    fi
+else
+    echo -e "\033[1;37m[START] Arduino Bridge...\033[0m\033[1;30m [SKIP] No Arduino detected.\033[0m"
+fi
+
 echo ""
 echo -e "\033[1;32m[SUCCESS] All services started successfully.\033[0m"
 echo -e "\033[1;36m[INFO] Dashboard available at: http://localhost:5173\033[0m"

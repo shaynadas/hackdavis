@@ -153,7 +153,7 @@ export default function App() {
     };
 
     pollData();
-    const interval = setInterval(pollData, 1000);
+    const interval = setInterval(pollData, 200);
     return () => clearInterval(interval);
   }, []);
 

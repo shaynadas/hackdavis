@@ -59,8 +59,8 @@ export function useTelemetryStreamer(serverUrl: string) {
     locationSubRef.current = await Location.watchPositionAsync(
       {
         accuracy: Location.Accuracy.High,
-        timeInterval: 1000,
-        distanceInterval: 1,
+        timeInterval: 200,
+        distanceInterval: 0,
       },
       (loc) => {
         gpsRef.current = {
@@ -75,7 +75,7 @@ export function useTelemetryStreamer(serverUrl: string) {
     setIsStreaming(true);
     setStatusMessage('Streaming...');
 
-    intervalRef.current = setInterval(sendTelemetry, 300); // 300ms interval
+    intervalRef.current = setInterval(sendTelemetry, 200); // 200ms interval
   };
 
   const stopStreaming = () => {
