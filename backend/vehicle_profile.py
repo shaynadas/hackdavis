@@ -32,7 +32,10 @@ def resolve_vehicle_profile(request_profile: VehicleProfileInput) -> dict:
     if request_profile:
         # Check if full profile is provided
         if request_profile.gear_ratios and request_profile.mass_kg:
-            return request_profile.dict()
+            prof = getattr(request_profile, "model_dump", request_profile.dict)(exclude_none=True)
+            if "source" not in prof:
+                prof["source"] = "provided_profile"
+            return prof
         
         # Check by make/model
         if request_profile.make and request_profile.model:
@@ -43,6 +46,14 @@ def resolve_vehicle_profile(request_profile: VehicleProfileInput) -> dict:
                 request_profile.trim
             )
             if profile:
+                if getattr(request_profile, "vin", None):
+                    profile["source"] = "vin_decoded_then_local_profile"
+                else:
+                    profile["source"] = "local_profile"
                 return profile
                 
-    return get_default_vehicle_profile("sedan")
+    prof = get_default_vehicle_profile("sedan")
+    prof["source"] = "default_sedan"
+    if request_profile and getattr(request_profile, "vin", None):
+        prof["source"] = "vin_failed_default_sedan"
+    return prof

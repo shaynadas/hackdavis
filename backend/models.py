@@ -162,3 +162,60 @@ class GradeResponse(BaseModel):
     horizontal_distance_m: float
     source: str
     error: Optional[str] = None
+
+class VoiceTranscriptResponse(BaseModel):
+    success: bool
+    source: str
+    transcript: Optional[str] = None
+    extracted_vin: Optional[str] = None
+    vin_confidence: Optional[float] = None
+    needs_confirmation: bool = False
+    vehicle_identity: Optional[dict] = None
+    error: Optional[str] = None
+
+class SpeakRequest(BaseModel):
+    text: str
+
+class VoiceRecommendationResponse(BaseModel):
+    transcript: str
+    extracted_vin: Optional[str] = None
+    vin_confidence: Optional[float] = None
+    vehicle_identity: Optional[dict] = None
+    recommendation: dict
+    audio_available: bool
+    warning: Optional[str] = None
+    voice_line: Optional[str] = None
+    speak_endpoint: Optional[str] = None
+
+class TypedVINRequest(BaseModel):
+    vin: str
+
+class VINCaptureResponse(BaseModel):
+    success: bool
+    session_id: Optional[str] = None
+    transcript: Optional[str] = None
+    normalized_vin: Optional[str] = None
+    vin_valid: bool = False
+    vin_confidence: Optional[float] = None
+    needs_repeat: bool = False
+    decoded_vehicle: Optional[dict] = None
+    confirmation_text: Optional[str] = None
+    error: Optional[str] = None
+
+class VINConfirmRequest(BaseModel):
+    session_id: str
+    confirmed: bool
+
+class VINConfirmResponse(BaseModel):
+    success: bool
+    confirmed: bool
+    vehicle_profile_saved: bool
+    vehicle_profile: Optional[dict] = None
+    message: str
+
+class YesNoVoiceResponse(BaseModel):
+    success: bool
+    transcript: Optional[str] = None
+    interpreted_answer: Optional[bool] = None
+    confidence: Optional[float] = None
+    error: Optional[str] = None

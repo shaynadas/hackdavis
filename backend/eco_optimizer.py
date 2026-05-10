@@ -6,6 +6,27 @@ from models import (
 )
 from vehicle_profile import resolve_vehicle_profile
 
+def model_to_dict(model):
+    if model is None:
+        return {}
+    if isinstance(model, dict):
+        return model
+    if hasattr(model, "model_dump"):
+        return model.model_dump(exclude_none=True)
+    return model.dict(exclude_none=True)
+
+def is_urgent_condition(perception: dict) -> bool:
+    """
+    Return True when safety overrides fuel economy.
+    """
+    return (
+        perception.get("pedestrian_detected", False)
+        or perception.get("hazard_detected", False)
+        or perception.get("possible_incident", False)
+        or perception.get("lead_vehicle_status") == "stopped"
+        or perception.get("traffic_state") == "stopped"
+    )
+
 def tire_circumference_m(width_mm: int, aspect_ratio: int, rim_in: int) -> float:
     sidewall_mm = width_mm * (aspect_ratio / 100.0)
     diameter_mm = rim_in * 25.4 + 2 * sidewall_mm
@@ -13,6 +34,8 @@ def tire_circumference_m(width_mm: int, aspect_ratio: int, rim_in: int) -> float
 
 def estimate_engine_rpm(speed_mph: float, gear_ratio: float, final_drive_ratio: float, 
                         tire_width: int, aspect_ratio: int, rim_in: int) -> float:
+    if speed_mph <= 0:
+        return 0.0
     speed_mps = speed_mph * 0.44704
     circ_m = tire_circumference_m(tire_width, aspect_ratio, rim_in)
     wheel_rps = speed_mps / circ_m
@@ -88,6 +111,14 @@ def choose_best_gear_and_rpm(speed_mph: float, vehicle_profile: dict, grade_perc
         elif rpm > target_high:
             cost += (rpm - target_high) * 0.01
             
+        if speed_mph > 12 and gear == 1:
+            cost += 80
+        if speed_mph > 25 and gear <= 2:
+            cost += 40
+            
+        # Tiebreaker: prefer highest gear
+        cost -= gear * 0.001
+            
         if cost < min_cost:
             min_cost = cost
             best_gear = gear
@@ -105,12 +136,37 @@ def choose_best_gear_and_rpm(speed_mph: float, vehicle_profile: dict, grade_perc
     }
 
 def estimate_current_rpm_range(current_speed_mph: float, vehicle_profile: dict, grade_percent: float) -> dict:
+    gear_ratios = vehicle_profile.get("gear_ratios", {})
+    fd = vehicle_profile.get("final_drive_ratio", 3.7)
+    tw = vehicle_profile.get("tire_width", 225)
+    ar = vehicle_profile.get("aspect_ratio", 50)
+    rim = vehicle_profile.get("rim_in", 17)
+    
+    valid_rpms = []
+    
+    for gear_str, ratio in gear_ratios.items():
+        try:
+            gear = int(gear_str)
+        except ValueError:
+            continue
+        rpm = estimate_engine_rpm(current_speed_mph, ratio, fd, tw, ar, rim)
+        
+        if grade_percent > 3.0 and rpm < 1600:
+            continue
+            
+        if 1100 <= rpm <= 3000:
+            valid_rpms.append(rpm)
+            
     best = choose_best_gear_and_rpm(current_speed_mph, vehicle_profile, grade_percent)
     best_gear = best["recommended_gear"]
-    est_rpm = best["estimated_rpm"]
     
-    low_bound = max(1000, int(est_rpm - 300))
-    high_bound = int(est_rpm + 500)
+    if valid_rpms:
+        low_bound = int(min(valid_rpms))
+        high_bound = int(max(valid_rpms))
+    else:
+        est_rpm = best["estimated_rpm"]
+        low_bound = max(1000, int(est_rpm - 300))
+        high_bound = int(est_rpm + 500)
     
     return {
         "estimated_current_rpm_range": f"{low_bound}-{high_bound}",
@@ -176,6 +232,7 @@ def score_speed_gear_candidate(candidate_speed: float, candidate_gear: int,
     stop_dist = context.get("upcoming_stop_distance_m")
     
     cap = perception_speed_cap(perception, limit, traffic_speed or limit)
+    urgent = is_urgent_condition(perception)
     
     score = 0.0
     
@@ -187,6 +244,14 @@ def score_speed_gear_candidate(candidate_speed: float, candidate_gear: int,
     if candidate_speed > cap:
         score += (candidate_speed - cap) * 10.0
         
+    if traffic_speed and not urgent:
+        if candidate_speed < traffic_speed - 7:
+            score += (traffic_speed - candidate_speed) * 3.0
+            
+    if not urgent and perception.get("traffic_state") != "stopped":
+        if candidate_speed < 15:
+            score += (15 - candidate_speed) * 5.0
+            
     # Penalize speed much higher than traffic
     if traffic_speed and candidate_speed > traffic_speed + 5:
         score += (candidate_speed - traffic_speed) * 2.0
@@ -227,23 +292,67 @@ def score_speed_gear_candidate(candidate_speed: float, candidate_gear: int,
     power = required_power_kw(candidate_speed, grade, mass)
     score += power * 0.1
     
+    # Low-gear penalties
+    if candidate_speed > 12 and candidate_gear == 1:
+        score += 80
+    if candidate_speed > 25 and candidate_gear <= 2:
+        score += 40
+    if candidate_speed > 35 and candidate_gear <= 3:
+        score += 20
+        
+    # Tiebreaker for highest gear
+    score -= candidate_gear * 0.001
+    
     return score
 
-def optimize_speed_and_rpm_jointly(context: dict, perception: dict, vehicle_profile: dict) -> dict:
+def optimize_speed_and_rpm_jointly(context: dict, perception: dict, vehicle_profile: dict, current_speed_mph: float) -> dict:
     limit = context.get("speed_limit_mph", 60)
+    traffic_speed = context.get("traffic_speed_mph")
     gear_ratios = vehicle_profile.get("gear_ratios", {})
+    cap = perception_speed_cap(perception, limit, traffic_speed or limit)
+    urgent = is_urgent_condition(perception)
+    
+    # Generate candidate speeds
+    candidates_set = set()
+    for s in range(5, int(limit) + 6, 5):
+        candidates_set.add(float(s))
+        
+    candidates_set.add(float(current_speed_mph))
+    candidates_set.add(float(current_speed_mph - 5))
+    candidates_set.add(float(current_speed_mph - 10))
+    if traffic_speed is not None:
+        candidates_set.add(float(traffic_speed))
+        candidates_set.add(float(traffic_speed + 5))
+        candidates_set.add(float(traffic_speed - 5))
+    candidates_set.add(float(cap))
+    candidates_set.add(float(limit))
+    
+    # Clip candidates
+    valid_speeds = []
+    max_speed = limit
+    if not urgent:
+        max_speed = min(max_speed, cap)
+    else:
+        max_speed = cap
+        
+    for s in candidates_set:
+        clipped = max(0.0, min(s, max_speed))
+        valid_speeds.append(round(clipped, 1))
+        
+    valid_speeds = sorted(list(set(valid_speeds)))
     
     best_speed = None
     best_gear = None
     min_score = float('inf')
     best_rpm = None
     
-    candidates = []
+    candidates_output = []
     
-    for speed in range(5, int(limit) + 6, 5):
-        if speed > limit + 5: 
-            continue
-            
+    for speed in valid_speeds:
+        best_gear_for_speed = None
+        best_rpm_for_speed = None
+        min_cost_for_speed = float('inf')
+        
         for gear_str in gear_ratios.keys():
             try:
                 gear = int(gear_str)
@@ -252,7 +361,7 @@ def optimize_speed_and_rpm_jointly(context: dict, perception: dict, vehicle_prof
                 
             score = score_speed_gear_candidate(speed, gear, context, perception, vehicle_profile)
             
-            # calculate rpm for candidate tracking
+            # calculate rpm
             fd = vehicle_profile.get("final_drive_ratio", 3.7)
             tw = vehicle_profile.get("tire_width", 225)
             ar = vehicle_profile.get("aspect_ratio", 50)
@@ -260,27 +369,33 @@ def optimize_speed_and_rpm_jointly(context: dict, perception: dict, vehicle_prof
             ratio = gear_ratios[gear_str]
             rpm = estimate_engine_rpm(speed, ratio, fd, tw, ar, rim)
             
-            candidates.append({
+            if score < min_cost_for_speed:
+                min_cost_for_speed = score
+                best_gear_for_speed = gear
+                best_rpm_for_speed = rpm
+                
+        if best_gear_for_speed is not None:
+            candidates_output.append({
                 "speed_mph": speed,
-                "best_gear": gear,
-                "estimated_rpm": int(rpm),
-                "cost": round(score, 1)
+                "best_gear": best_gear_for_speed,
+                "estimated_rpm": int(best_rpm_for_speed),
+                "cost": round(min_cost_for_speed, 1)
             })
             
-            if score < min_score:
-                min_score = score
+            if min_cost_for_speed < min_score:
+                min_score = min_cost_for_speed
                 best_speed = speed
-                best_gear = gear
-                best_rpm = int(rpm)
+                best_gear = best_gear_for_speed
+                best_rpm = int(best_rpm_for_speed)
                 
     if best_speed is None:
-        best_speed = 25
+        best_speed = 25.0
         best_gear = 3
         best_rpm = 1800
         min_score = 0.0
         
-    candidates.sort(key=lambda x: x["cost"])
-    top_candidates = candidates[:5]
+    candidates_output.sort(key=lambda x: x["cost"])
+    top_candidates = candidates_output[:5]
     
     band_low = max(5, int(best_speed - 3))
     band_high = int(best_speed + 3)
@@ -302,12 +417,7 @@ def optimize_speed_and_rpm_jointly(context: dict, perception: dict, vehicle_prof
     }
 
 def determine_recommended_action(current_speed_mph: float, optimal_speed_now_mph: float, perception: dict) -> RecommendedAction:
-    p_ped = perception.get("pedestrian_detected", False)
-    p_haz = perception.get("hazard_detected", False)
-    p_inc = perception.get("possible_incident", False)
-    p_lead_s = perception.get("lead_vehicle_status", "none")
-    
-    if p_ped or p_haz or p_inc or p_lead_s == "stopped":
+    if is_urgent_condition(perception):
         return RecommendedAction.urgent_slow_down
         
     diff = current_speed_mph - optimal_speed_now_mph
@@ -412,20 +522,20 @@ def generate_advice(context: dict, perception: dict, recommendation: dict, actio
     return AdviceOutput(voice_line=voice, reason=reason)
 
 def get_recommendation(payload: RecommendationRequest) -> dict:
-    req_dict = payload.dict(exclude_none=True)
+    req_dict = model_to_dict(payload)
     
     loc = req_dict.get("location", {})
     ctx = req_dict.get("road_context", {})
     perc = req_dict.get("perception", {})
     vp_input = payload.vehicle_profile
     
-    current_speed = loc.get("speed_mph", 30.0)
-    grade = ctx.get("road_grade_percent", 0.0)
+    current_speed = round(loc.get("speed_mph", 30.0), 1)
+    grade = round(ctx.get("road_grade_percent", 0.0), 2)
     
     profile = resolve_vehicle_profile(vp_input)
     
-    opt_res = optimize_speed_and_rpm_jointly(ctx, perc, profile)
-    optimal_speed = opt_res["optimal_speed_now_mph"]
+    opt_res = optimize_speed_and_rpm_jointly(ctx, perc, profile, current_speed)
+    optimal_speed = round(opt_res["optimal_speed_now_mph"], 1)
     
     est_rpm_range = estimate_current_rpm_range(current_speed, profile, grade)
     
@@ -442,7 +552,7 @@ def get_recommendation(payload: RecommendationRequest) -> dict:
     summary = RecommendationSummary(
         current_speed_mph=current_speed,
         optimal_speed_now_mph=optimal_speed,
-        recommended_speed_delta_mph=optimal_speed - current_speed,
+        recommended_speed_delta_mph=round(optimal_speed - current_speed, 1),
         recommended_action=action,
         recommended_speed_band_mph=opt_res["recommended_speed_band_mph"],
         recommended_gear=opt_res["recommended_gear"],
@@ -450,7 +560,7 @@ def get_recommendation(payload: RecommendationRequest) -> dict:
         target_rpm_range_at_optimal_speed=target_rpm,
         estimated_current_rpm_range=est_rpm_range["estimated_current_rpm_range"],
         likely_current_gear=est_rpm_range["likely_current_gear"],
-        gear_confidence=est_rpm_range["gear_confidence"],
+        gear_confidence=round(est_rpm_range["gear_confidence"], 2),
         eco_score=eco_score,
         safety_level=safety
     )
@@ -463,16 +573,17 @@ def get_recommendation(payload: RecommendationRequest) -> dict:
     cands = [SpeedRPMCandidate(**c) for c in opt_res["speed_rpm_candidates"]]
     
     return {
-        "summary": summary.dict(),
-        "advice": advice.dict(),
-        "rpm_speed_mapping": mapping.dict(),
-        "speed_rpm_candidates": [c.dict() for c in cands],
+        "summary": model_to_dict(summary),
+        "advice": model_to_dict(advice),
+        "rpm_speed_mapping": model_to_dict(mapping),
+        "speed_rpm_candidates": [model_to_dict(c) for c in cands],
         "context_used": ctx,
         "vehicle_used": {
             "year": profile.get("year"),
             "make": profile.get("make"),
             "model": profile.get("model"),
-            "trim": profile.get("trim")
+            "trim": profile.get("trim"),
+            "source": profile.get("source", "unknown")
         },
         "debug": {
             "gear_known": False,
