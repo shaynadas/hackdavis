@@ -256,7 +256,7 @@ class CVPipeline:
         self.push_enabled = push_enabled
         self.tracker      = CentroidTracker()
         self.latest       = self._mock_result()
-        
+
         self.latest_raw_frame_jpg = None
         self.latest_annotated_frame_jpg = None
         self.raw_frame = None
@@ -292,6 +292,10 @@ class CVPipeline:
     def get_result(self) -> dict:
         with self._lock:
             return dict(self.latest)
+
+    def get_frame(self):
+        with self._lock:
+            return None if self.latest_frame is None else self.latest_frame.copy()
 
     def _push_to_backend(self, result: dict):
         """Push perception result to the backend's /perception/update endpoint."""
@@ -501,13 +505,19 @@ if __name__ == "__main__":
     import sys
     import uvicorn
 
+    # Usage: python cv_pipeline.py [source] [--no-push] [--no-window]
+    # source: "0" for webcam (default), "mock" for mock data, or path to video file
+    # --no-push: disable pushing to backend
+    # --no-window: disable the live preview window
+
     source = sys.argv[1] if len(sys.argv) > 1 and not sys.argv[1].startswith("--") else "0"
     push_enabled = "--no-push" not in sys.argv
+    show_window  = "--no-window" not in sys.argv
 
     use_mock = source == "mock"
     src = int(source) if source.isdigit() else source
 
-    print(f"[cv_pipeline] Starting with source={source}, push_enabled={push_enabled}")
+    print(f"[cv_pipeline] Starting with source={source}, push_enabled={push_enabled}, window={show_window}")
     print(f"[cv_pipeline] Backend URL: {BACKEND_URL}")
 
     # Start FastAPI which will internally start the CVPipeline
@@ -518,14 +528,30 @@ if __name__ == "__main__":
         print("[cv_pipeline] Starting FastAPI server on port 8001")
         uvicorn.run(app, host="0.0.0.0", port=8001)
     else:
-        # Fallback if no FastAPI
+        # Fallback if no FastAPI — run pipeline directly with optional window
         pipeline = CVPipeline(source=src, use_mock=use_mock, push_enabled=push_enabled)
         pipeline.start()
+
+        last_print = 0.0
         try:
-            print("[cv_pipeline] Running without API... Press Ctrl+C to stop.")
+            print("[cv_pipeline] Running... press q in the window or Ctrl+C to stop.")
             while True:
-                time.sleep(1)
+                if show_window and not use_mock:
+                    frame = pipeline.get_result()
+                    if frame is not None:
+                        cv2.waitKey(1)
+                else:
+                    time.sleep(0.05)
+
+                now = time.time()
+                if now - last_print >= 1.0:
+                    result = pipeline.get_result()
+                    print(f"[{time.strftime('%H:%M:%S')}] {json.dumps(result)}")
+                    last_print = now
         except KeyboardInterrupt:
-            pass
+            print("\n[cv_pipeline] Stopping...")
         finally:
             pipeline.stop()
+            if show_window:
+                cv2.destroyAllWindows()
+            print("[cv_pipeline] Stopped.")
