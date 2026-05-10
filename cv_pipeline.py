@@ -170,7 +170,7 @@ def classify_traffic(tracks: dict, frame_height: int) -> dict:
     # ── hazard: stopped vehicle in ROI or lead braking ──
     hazard = stopped_count > 0 or lead_status == "braking"
 
-    # ── accident: heuristic — multiple stopped vehicles clustered ──
+    # ── accident: heuristic, multiple stopped vehicles clustered ──
     accident = _detect_accident(vehicles)
 
     return {
@@ -254,6 +254,7 @@ class CVPipeline:
         self.push_enabled = push_enabled
         self.tracker      = CentroidTracker()
         self.latest       = self._mock_result()
+        self.latest_frame = None
         self._running     = False
         self._thread      = None
         self._lock        = threading.Lock()
@@ -279,15 +280,19 @@ class CVPipeline:
         with self._lock:
             return dict(self.latest)
 
+    def get_frame(self):
+        with self._lock:
+            return None if self.latest_frame is None else self.latest_frame.copy()
+
     def _push_to_backend(self, result: dict):
         """Push perception result to the backend's /perception/update endpoint."""
         if not self.push_enabled:
             return
-        
+
         now = time.time() * 1000  # ms
         if now - self._last_push < PUSH_INTERVAL_MS:
             return
-        
+
         self._last_push = now
         try:
             resp = requests.post(
@@ -343,7 +348,23 @@ class CVPipeline:
             detections.append((cx, cy, x1, y1, x2, y2, cls))
 
         tracks = self.tracker.update(detections)
-        return classify_traffic(tracks, h)
+        perception = classify_traffic(tracks, h)
+
+        # Build the visualization frame: YOLO boxes + perception overlay
+        annotated = results[0].plot()
+        line1 = f"{perception['traffic_state']} | lead: {perception['lead_vehicle_status']} {perception['lead_vehicle_distance']}"
+        cv2.putText(annotated, line1, (10, 28), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+        if perception["hazard_detected"]:
+            cv2.putText(annotated, "HAZARD", (10, 56), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+        if perception["pedestrian_detected"]:
+            cv2.putText(annotated, "PED", (10, 84), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 200, 255), 2)
+        if perception["possible_incident"]:
+            cv2.putText(annotated, "INCIDENT", (10, 112), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+
+        with self._lock:
+            self.latest_frame = annotated
+
+        return perception
 
     def _mock_loop(self):
         scenarios = [
@@ -436,31 +457,48 @@ except ImportError:
 # ── CLI ────────────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
     import sys
-    
-    # Usage: python cv_pipeline.py [source] [--no-push]
+
+    # Usage: python cv_pipeline.py [source] [--no-push] [--no-window]
     # source: "0" for webcam (default), "mock" for mock data, or path to video file
     # --no-push: disable pushing to backend
-    
-    source = sys.argv[1] if len(sys.argv) > 1 else "0"  # Default to webcam
+    # --no-window: disable the live preview window
+
+    source = sys.argv[1] if len(sys.argv) > 1 else "0"
     push_enabled = "--no-push" not in sys.argv
-    
+    show_window  = "--no-window" not in sys.argv
+
     use_mock = source == "mock"
     src = 0 if source == "0" else source
 
-    print(f"[cv_pipeline] Starting with source={source}, push_enabled={push_enabled}")
+    print(f"[cv_pipeline] Starting with source={source}, push_enabled={push_enabled}, window={show_window}")
     print(f"[cv_pipeline] Backend URL: {BACKEND_URL}")
-    
+
     pipeline = CVPipeline(source=src, use_mock=use_mock, push_enabled=push_enabled)
     pipeline.start()
-    
+
+    last_print = 0.0
     try:
-        print("[cv_pipeline] Running... Press Ctrl+C to stop.")
+        print("[cv_pipeline] Running... press q in the window or Ctrl+C to stop.")
         while True:
-            result = pipeline.get_result()
-            print(f"[{time.strftime('%H:%M:%S')}] {json.dumps(result)}")
-            time.sleep(1)
+            if show_window and not use_mock:
+                frame = pipeline.get_frame()
+                if frame is not None:
+                    cv2.imshow("cv_pipeline", frame)
+                key = cv2.waitKey(1) & 0xFF
+                if key == ord('q'):
+                    break
+            else:
+                time.sleep(0.05)
+
+            now = time.time()
+            if now - last_print >= 1.0:
+                result = pipeline.get_result()
+                print(f"[{time.strftime('%H:%M:%S')}] {json.dumps(result)}")
+                last_print = now
     except KeyboardInterrupt:
         print("\n[cv_pipeline] Stopping...")
     finally:
         pipeline.stop()
+        if show_window:
+            cv2.destroyAllWindows()
         print("[cv_pipeline] Stopped.")
