@@ -1,6 +1,8 @@
 """
 cv_pipeline.py — Person A: Camera / CV Perception
 Eco-Driving Copilot MVP
+
+Real-time integration with backend via /perception/update endpoint.
 """
 
 import cv2
@@ -8,6 +10,7 @@ import json
 import time
 import threading
 import math
+import requests
 from collections import deque
 from dataclasses import dataclass
 from typing import Optional
@@ -18,6 +21,10 @@ try:
 except ImportError:
     YOLO_AVAILABLE = False
     print("[cv_pipeline] WARNING: ultralytics not installed. Using mock output.")
+
+# ── Backend Integration ───────────────────────────────────────────────────────
+BACKEND_URL = "http://localhost:8000"
+PUSH_INTERVAL_MS = 500  # Push to backend every 500ms to avoid overwhelming it
 
 # ── Constants ──────────────────────────────────────────────────────────────────
 VEHICLE_CLASSES         = {2: "car", 3: "motorcycle", 5: "bus", 7: "truck"}
@@ -171,7 +178,7 @@ def classify_traffic(tracks: dict, frame_height: int) -> dict:
         "lead_vehicle_status":     lead_status,
         "lead_vehicle_distance":   lead_distance,
         "stopped_vehicle_detected": stopped_count > 0,
-        "accident_detected":       accident,
+        "possible_incident":       accident,
         "hazard_detected":         hazard,
         "pedestrian_detected":     len(pedestrians) > 0,
         "confidence":              round(confidence, 2),
@@ -192,7 +199,7 @@ def _lead_status(lead: Optional[Track]) -> str:
         if early - late > BRAKING_SPEED_DROP:
             return "braking"
     if lead.speed_px_s < SLOW_SPEED_THRESHOLD:
-        return "slowing"
+        return "braking"  # Backend enum only has: none, moving, braking, stopped
     return "moving"
 
 
@@ -211,7 +218,7 @@ def _speed_series(history: deque) -> list:
 def _lead_distance(lead: Optional[Track], frame_height: int) -> str:
     """Estimate distance based on how low in frame the lead vehicle is."""
     if lead is None:
-        return "none"
+        return "far"  # Default to "far" when no lead vehicle (backend enum doesn't have "none")
     y_frac = lead.centroid[1] / frame_height
     if y_frac > 0.75:
         return "close"
@@ -240,14 +247,17 @@ def _detect_accident(vehicles: list) -> bool:
 
 # ── Main Pipeline ──────────────────────────────────────────────────────────────
 class CVPipeline:
-    def __init__(self, source=0, use_mock=False):
-        self.source   = source
-        self.use_mock = use_mock or not YOLO_AVAILABLE
-        self.tracker  = CentroidTracker()
-        self.latest   = self._mock_result()
-        self._running = False
-        self._thread  = None
-        self._lock    = threading.Lock()
+    def __init__(self, source=0, use_mock=False, backend_url=BACKEND_URL, push_enabled=True):
+        self.source       = source
+        self.use_mock     = use_mock or not YOLO_AVAILABLE
+        self.backend_url  = backend_url
+        self.push_enabled = push_enabled
+        self.tracker      = CentroidTracker()
+        self.latest       = self._mock_result()
+        self._running     = False
+        self._thread      = None
+        self._lock        = threading.Lock()
+        self._last_push   = 0.0
 
         if not self.use_mock:
             print("[cv_pipeline] Loading YOLOv8n...")
@@ -268,6 +278,29 @@ class CVPipeline:
     def get_result(self) -> dict:
         with self._lock:
             return dict(self.latest)
+
+    def _push_to_backend(self, result: dict):
+        """Push perception result to the backend's /perception/update endpoint."""
+        if not self.push_enabled:
+            return
+        
+        now = time.time() * 1000  # ms
+        if now - self._last_push < PUSH_INTERVAL_MS:
+            return
+        
+        self._last_push = now
+        try:
+            resp = requests.post(
+                f"{self.backend_url}/perception/update",
+                json=result,
+                timeout=1.0
+            )
+            if resp.status_code == 200:
+                print(f"[cv_pipeline] Pushed perception: {result.get('traffic_state')}")
+            else:
+                print(f"[cv_pipeline] Backend returned {resp.status_code}")
+        except requests.exceptions.RequestException as e:
+            print(f"[cv_pipeline] Failed to push to backend: {e}")
 
     def _loop(self):
         if self.use_mock:
@@ -293,6 +326,7 @@ class CVPipeline:
             result = self._process_frame(frame)
             with self._lock:
                 self.latest = result
+            self._push_to_backend(result)
             time.sleep(max(0, frame_delay - (time.time() - t0)))
 
         cap.release()
@@ -313,21 +347,23 @@ class CVPipeline:
 
     def _mock_loop(self):
         scenarios = [
-            {"traffic_state": "clear",    "lead_vehicle_status": "none",    "lead_vehicle_distance": "none",   "stopped_vehicle_detected": False, "accident_detected": False, "hazard_detected": False, "pedestrian_detected": False, "confidence": 0.88},
-            {"traffic_state": "moderate", "lead_vehicle_status": "moving",  "lead_vehicle_distance": "far",    "stopped_vehicle_detected": False, "accident_detected": False, "hazard_detected": False, "pedestrian_detected": False, "confidence": 0.72},
-            {"traffic_state": "slowing",  "lead_vehicle_status": "slowing", "lead_vehicle_distance": "medium", "stopped_vehicle_detected": False, "accident_detected": False, "hazard_detected": False, "pedestrian_detected": True,  "confidence": 0.76},
-            {"traffic_state": "slowing",  "lead_vehicle_status": "braking", "lead_vehicle_distance": "close",  "stopped_vehicle_detected": True,  "accident_detected": False, "hazard_detected": True,  "pedestrian_detected": False, "confidence": 0.82},
-            {"traffic_state": "stopped",  "lead_vehicle_status": "stopped", "lead_vehicle_distance": "close",  "stopped_vehicle_detected": True,  "accident_detected": False, "hazard_detected": True,  "pedestrian_detected": False, "confidence": 0.84},
-            {"traffic_state": "stopped",  "lead_vehicle_status": "stopped", "lead_vehicle_distance": "close",  "stopped_vehicle_detected": True,  "accident_detected": True,  "hazard_detected": True,  "pedestrian_detected": True,  "confidence": 0.79},
-            {"traffic_state": "moderate", "lead_vehicle_status": "moving",  "lead_vehicle_distance": "medium", "stopped_vehicle_detected": False, "accident_detected": False, "hazard_detected": False, "pedestrian_detected": False, "confidence": 0.70},
-            {"traffic_state": "clear",    "lead_vehicle_status": "moving",  "lead_vehicle_distance": "far",    "stopped_vehicle_detected": False, "accident_detected": False, "hazard_detected": False, "pedestrian_detected": False, "confidence": 0.85},
+            {"traffic_state": "clear",    "lead_vehicle_status": "none",    "lead_vehicle_distance": "far",    "stopped_vehicle_detected": False, "possible_incident": False, "hazard_detected": False, "pedestrian_detected": False, "confidence": 0.88},
+            {"traffic_state": "moderate", "lead_vehicle_status": "moving",  "lead_vehicle_distance": "far",    "stopped_vehicle_detected": False, "possible_incident": False, "hazard_detected": False, "pedestrian_detected": False, "confidence": 0.72},
+            {"traffic_state": "slowing",  "lead_vehicle_status": "braking", "lead_vehicle_distance": "medium", "stopped_vehicle_detected": False, "possible_incident": False, "hazard_detected": False, "pedestrian_detected": True,  "confidence": 0.76},
+            {"traffic_state": "slowing",  "lead_vehicle_status": "braking", "lead_vehicle_distance": "close",  "stopped_vehicle_detected": True,  "possible_incident": False, "hazard_detected": True,  "pedestrian_detected": False, "confidence": 0.82},
+            {"traffic_state": "stopped",  "lead_vehicle_status": "stopped", "lead_vehicle_distance": "close",  "stopped_vehicle_detected": True,  "possible_incident": False, "hazard_detected": True,  "pedestrian_detected": False, "confidence": 0.84},
+            {"traffic_state": "stopped",  "lead_vehicle_status": "stopped", "lead_vehicle_distance": "close",  "stopped_vehicle_detected": True,  "possible_incident": True,  "hazard_detected": True,  "pedestrian_detected": True,  "confidence": 0.79},
+            {"traffic_state": "moderate", "lead_vehicle_status": "moving",  "lead_vehicle_distance": "medium", "stopped_vehicle_detected": False, "possible_incident": False, "hazard_detected": False, "pedestrian_detected": False, "confidence": 0.70},
+            {"traffic_state": "clear",    "lead_vehicle_status": "moving",  "lead_vehicle_distance": "far",    "stopped_vehicle_detected": False, "possible_incident": False, "hazard_detected": False, "pedestrian_detected": False, "confidence": 0.85},
         ]
         i = 0
         while self._running:
+            scenario = dict(scenarios[i % len(scenarios)])
             with self._lock:
-                self.latest = dict(scenarios[i % len(scenarios)])
+                self.latest = scenario
+            self._push_to_backend(scenario)
             i += 1
-            time.sleep(3)
+            time.sleep(1)  # Push mock data every 1 second
 
     @staticmethod
     def _mock_result() -> dict:
@@ -336,7 +372,7 @@ class CVPipeline:
             "lead_vehicle_status":      "braking",
             "lead_vehicle_distance":    "close",
             "stopped_vehicle_detected": True,
-            "accident_detected":        False,
+            "possible_incident":        False,
             "hazard_detected":          True,
             "pedestrian_detected":      False,
             "confidence":               0.82,
@@ -372,7 +408,7 @@ try:
           "lead_vehicle_status": "braking",
           "lead_vehicle_distance": "close",
           "stopped_vehicle_detected": true,
-          "accident_detected": false,
+          "possible_incident": false,
           "hazard_detected": true,
           "pedestrian_detected": false,
           "confidence": 0.82
@@ -400,17 +436,31 @@ except ImportError:
 # ── CLI ────────────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
     import sys
-    source   = sys.argv[1] if len(sys.argv) > 1 else "mock"
+    
+    # Usage: python cv_pipeline.py [source] [--no-push]
+    # source: "0" for webcam (default), "mock" for mock data, or path to video file
+    # --no-push: disable pushing to backend
+    
+    source = sys.argv[1] if len(sys.argv) > 1 else "0"  # Default to webcam
+    push_enabled = "--no-push" not in sys.argv
+    
     use_mock = source == "mock"
-    src      = 0 if source == "0" else source
+    src = 0 if source == "0" else source
 
-    pipeline = CVPipeline(source=src, use_mock=use_mock)
+    print(f"[cv_pipeline] Starting with source={source}, push_enabled={push_enabled}")
+    print(f"[cv_pipeline] Backend URL: {BACKEND_URL}")
+    
+    pipeline = CVPipeline(source=src, use_mock=use_mock, push_enabled=push_enabled)
     pipeline.start()
+    
     try:
-        for _ in range(20):
-            print(json.dumps(pipeline.get_result()))
+        print("[cv_pipeline] Running... Press Ctrl+C to stop.")
+        while True:
+            result = pipeline.get_result()
+            print(f"[{time.strftime('%H:%M:%S')}] {json.dumps(result)}")
             time.sleep(1)
     except KeyboardInterrupt:
-        pass
+        print("\n[cv_pipeline] Stopping...")
     finally:
         pipeline.stop()
+        print("[cv_pipeline] Stopped.")
