@@ -10,7 +10,8 @@ import { RPMEcoChart } from './components/RPMEcoChart';
 import { VehiclePanel } from './components/VehiclePanel';
 import { VoicePanel } from './components/VoicePanel';
 import { RawJsonPanel } from './components/RawJsonPanel';
-import { Car, Navigation, Smartphone } from 'lucide-react';
+import { PhoneTelemetryPanel } from './components/PhoneTelemetryPanel';
+import { Car, Navigation } from 'lucide-react';
 import { useLocationStreamer } from './hooks/useLocationStreamer';
 import type { EventLogItem, RecommendationResponse, LocationInput, PerceptionInput, RoadContextInput, VehicleProfileInput, VoiceStatus } from './types';
 
@@ -163,7 +164,7 @@ export default function App() {
       <div className="flex-1 p-4 grid grid-cols-12 gap-4">
         {/* Left Column */}
         <div className="col-span-3 flex flex-col gap-4">
-          <InputStatePanel title="Phone Telemetry" icon={<Smartphone className="w-4 h-4" />} data={telemetry || { status: "Waiting for stream..." }} />
+          <PhoneTelemetryPanel telemetry={telemetry} />
           <InputStatePanel title="Perception State" icon={<Car className="w-4 h-4" />} data={perception} />
           <EventLog logs={logs} />
         </div>

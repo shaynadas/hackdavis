@@ -47,10 +47,19 @@ else
 fi
 cd ..
 
-# 2. Start CV Pipeline (Removed live camera feed)
-# SOURCE=${1:-mock}
-# echo "[START] CV Pipeline with source: $SOURCE (Port 8001)..."
-# python cv_pipeline.py $SOURCE &
+# 2. Start CV Pipeline (webcam, source=0, port 8001)
+if [ "$DEBUG_MODE" = true ]; then
+    echo -e "\033[1;37m[START] CV Pipeline (Webcam, Port 8001)...\033[0m"
+else
+    echo -ne "\033[1;37m[START] CV Pipeline (Webcam, Port 8001)...\033[0m"
+fi
+if [ "$DEBUG_MODE" = true ]; then
+    python cv_pipeline.py 0 &
+else
+    python cv_pipeline.py 0 > /dev/null 2>&1 &
+    sleep 2 # Give YOLO a moment to load
+    echo -e " \033[1;32m[OK]\033[0m"
+fi
 
 # 3. Start Frontend
 if [ "$DEBUG_MODE" = true ]; then
