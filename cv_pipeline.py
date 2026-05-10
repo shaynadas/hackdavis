@@ -468,7 +468,7 @@ if __name__ == "__main__":
     show_window  = "--no-window" not in sys.argv
 
     use_mock = source == "mock"
-    src = 0 if source == "0" else source
+    src = int(source) if source.isdigit() else source
 
     print(f"[cv_pipeline] Starting with source={source}, push_enabled={push_enabled}, window={show_window}")
     print(f"[cv_pipeline] Backend URL: {BACKEND_URL}")
