@@ -6,7 +6,10 @@ echo "🚀 Starting Eco-Driving Copilot..."
 cleanup() {
     echo ""
     echo "🛑 Shutting down all services..."
-    kill $(jobs -p) 2>/dev/null
+    # Force kill all background jobs started by this script
+    kill -9 $(jobs -p) 2>/dev/null
+    # Ensure any child processes (like uvicorn workers or node) are also killed
+    pkill -9 -P $$ 2>/dev/null
     exit
 }
 trap cleanup SIGINT SIGTERM

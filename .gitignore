@@ -19,3 +19,13 @@ __pycache__/
 
 # MacOS
 .DS_Store
+
+# Node/NPM
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Expo / React Native
+.expo/
+dist/
+web-build/
