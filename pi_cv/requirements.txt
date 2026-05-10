@@ -1,0 +1,9 @@
+ultralytics>=8.0.0
+opencv-python>=4.5.0
+requests>=2.25.0
+numpy>=1.23.0
+
+# Optional, only needed if you run the FastAPI app inside cv_pipeline_pi.py
+# (cv_view.py uses stdlib http.server and does NOT need these)
+fastapi>=0.100.0
+uvicorn>=0.23.0
