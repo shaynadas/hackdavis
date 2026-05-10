@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { api } from './api';
 import { Header } from './components/Header';
-import { LiveVideoPanel } from './components/LiveVideoPanel';
 import { InputStatePanel } from './components/InputStatePanel';
 import { LocationPanel } from './components/LocationPanel';
 import { EventLog } from './components/EventLog';
@@ -11,7 +10,7 @@ import { RPMEcoChart } from './components/RPMEcoChart';
 import { VehiclePanel } from './components/VehiclePanel';
 import { VoicePanel } from './components/VoicePanel';
 import { RawJsonPanel } from './components/RawJsonPanel';
-import { Car, Navigation } from 'lucide-react';
+import { Car, Navigation, Smartphone } from 'lucide-react';
 import { useLocationStreamer } from './hooks/useLocationStreamer';
 import type { EventLogItem, RecommendationResponse, LocationInput, PerceptionInput, RoadContextInput, VehicleProfileInput, VoiceStatus } from './types';
 
@@ -21,6 +20,7 @@ export default function App() {
   
   const [recommendation, setRecommendation] = useState<RecommendationResponse | null>(null);
   const [location, setLocation] = useState<LocationInput | null>(null);
+  const [telemetry, setTelemetry] = useState<any | null>(null);
   const [perception, setPerception] = useState<PerceptionInput | null>(null);
   const [roadContext, setRoadContext] = useState<RoadContextInput | null>(null);
   const [vehicle, setVehicle] = useState<VehicleProfileInput | null>(null);
@@ -72,10 +72,11 @@ export default function App() {
   useEffect(() => {
     const pollData = async () => {
       try {
-        const [health, rec, loc, perc, ctx, veh, voice] = await Promise.all([
+        const [health, rec, loc, tel, perc, ctx, veh, voice] = await Promise.all([
           api.checkHealth(),
           api.getLiveRecommendation(),
           api.getLatestLocation(),
+          api.getLatestTelemetry(),
           api.getLatestPerception(),
           api.getLatestRoadContext(),
           api.getLatestVehicle(),
@@ -135,6 +136,7 @@ export default function App() {
         }
 
         if (loc) setLocation(loc);
+        if (tel) setTelemetry(tel);
         if (perc) setPerception(perc);
         if (ctx) setRoadContext(ctx);
         if (veh) setVehicle(veh);
@@ -161,7 +163,7 @@ export default function App() {
       <div className="flex-1 p-4 grid grid-cols-12 gap-4">
         {/* Left Column */}
         <div className="col-span-3 flex flex-col gap-4">
-          <LiveVideoPanel />
+          <InputStatePanel title="Phone Telemetry" icon={<Smartphone className="w-4 h-4" />} data={telemetry || { status: "Waiting for stream..." }} />
           <InputStatePanel title="Perception State" icon={<Car className="w-4 h-4" />} data={perception} />
           <EventLog logs={logs} />
         </div>
@@ -189,6 +191,7 @@ export default function App() {
           <RawJsonPanel payloads={{
             recommendation,
             location,
+            telemetry,
             perception,
             road_context: roadContext,
             vehicle,

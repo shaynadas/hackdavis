@@ -1,98 +1,123 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
-
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+import React, { useState } from 'react';
+import { StyleSheet, View, Text, TextInput, Button, ScrollView, SafeAreaView } from 'react-native';
+import { useTelemetryStreamer } from '@/hooks/useTelemetryStreamer';
 
 export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+  const [serverUrl, setServerUrl] = useState('http://172.20.10.2:8000/telemetry');
+  const { isStreaming, latestPacket, statusMessage, startStreaming, stopStreaming } = useTelemetryStreamer(serverUrl);
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+  return (
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <Text style={styles.header}>Telemetry Client</Text>
+        
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Backend Server URL:</Text>
+          <TextInput
+            style={styles.input}
+            value={serverUrl}
+            onChangeText={setServerUrl}
+            placeholder="http://172.20.10.2:8000/telemetry"
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+        </View>
+
+        <View style={styles.buttonContainer}>
+          <Button 
+            title={isStreaming ? "Streaming Active" : "Start Streaming"} 
+            onPress={startStreaming} 
+            disabled={isStreaming} 
+          />
+          <View style={{ height: 10 }} />
+          <Button 
+            title="Stop Streaming" 
+            onPress={stopStreaming} 
+            disabled={!isStreaming} 
+            color="red"
+          />
+        </View>
+
+        <View style={styles.statusContainer}>
+          <Text style={styles.statusLabel}>Status:</Text>
+          <Text style={styles.statusText}>{statusMessage}</Text>
+        </View>
+
+        <View style={styles.packetContainer}>
+          <Text style={styles.packetLabel}>Latest Packet:</Text>
+          <View style={styles.packetBox}>
+            <Text style={styles.packetText}>
+              {latestPacket ? JSON.stringify(latestPacket, null, 2) : 'No data yet'}
+            </Text>
+          </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  scrollContent: {
+    padding: 20,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  header: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  inputContainer: {
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: 16,
+    marginBottom: 5,
+    fontWeight: '500',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    padding: 10,
+    fontSize: 16,
+  },
+  buttonContainer: {
+    marginBottom: 20,
+  },
+  statusContainer: {
+    marginBottom: 20,
+    padding: 10,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 5,
+  },
+  statusLabel: {
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  statusText: {
+    fontSize: 16,
+    color: '#333',
+  },
+  packetContainer: {
+    flex: 1,
+  },
+  packetLabel: {
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  packetBox: {
+    backgroundColor: '#1e1e1e',
+    padding: 10,
+    borderRadius: 5,
+    minHeight: 200,
+  },
+  packetText: {
+    color: '#00ff00',
+    fontFamily: 'monospace',
+    fontSize: 12,
   },
 });

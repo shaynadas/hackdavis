@@ -193,7 +193,11 @@ async def synthesize_speech_with_elevenlabs(text: str) -> tuple[Optional[bytes],
             response = await client.post(url, headers=headers, json=data)
             response.raise_for_status()
             return response.content, "audio/mpeg"
-    except Exception:
+    except httpx.HTTPStatusError as e:
+        print(f"ElevenLabs TTS Error: {e.response.status_code} - {e.response.text}")
+        return None, None
+    except Exception as e:
+        print(f"ElevenLabs TTS Exception: {str(e)}")
         return None, None
 
 def normalize_vin_capture_text(text: str) -> str:

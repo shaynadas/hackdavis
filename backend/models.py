@@ -30,6 +30,7 @@ class RecommendedAction(str, Enum):
     slow_down = "slow_down"
     accelerate_gently = "accelerate_gently"
     urgent_slow_down = "urgent_slow_down"
+    idle = "idle"
 
 class SafetyLevel(str, Enum):
     safe = "safe"
@@ -219,3 +220,21 @@ class YesNoVoiceResponse(BaseModel):
     interpreted_answer: Optional[bool] = None
     confidence: Optional[float] = None
     error: Optional[str] = None
+
+class Vector3(BaseModel):
+    x: float
+    y: float
+    z: float
+
+class GPSInput(BaseModel):
+    latitude: float
+    longitude: float
+    speed: float
+    heading: float
+
+class TelemetryInput(BaseModel):
+    timestamp: float
+    accel: Optional[Vector3] = None
+    gyro: Optional[Vector3] = None
+    gps: Optional[GPSInput] = None
+

@@ -417,6 +417,9 @@ def optimize_speed_and_rpm_jointly(context: dict, perception: dict, vehicle_prof
     }
 
 def determine_recommended_action(current_speed_mph: float, optimal_speed_now_mph: float, perception: dict) -> RecommendedAction:
+    if current_speed_mph == 0.0:
+        return RecommendedAction.idle
+        
     if is_urgent_condition(perception):
         return RecommendedAction.urgent_slow_down
         
@@ -484,7 +487,10 @@ def generate_advice(context: dict, perception: dict, recommendation: dict, actio
     voice = ""
     reason = ""
     
-    if action == RecommendedAction.urgent_slow_down:
+    if action == RecommendedAction.idle:
+        voice = "Vehicle is idle."
+        reason = "Current speed is zero."
+    elif action == RecommendedAction.urgent_slow_down:
         voice = "Slow down now. A possible hazard is detected ahead."
         reason = "Hazard, pedestrian, or stopped vehicle detected."
     elif action == RecommendedAction.coast:

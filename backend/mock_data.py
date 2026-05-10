@@ -16,15 +16,15 @@ def get_mock_road_context() -> RoadContextInput:
 
 def get_mock_perception() -> PerceptionInput:
     return PerceptionInput(
-        traffic_state=TrafficState.slowing,
-        lead_vehicle_status=LeadVehicleStatus.braking,
-        lead_vehicle_distance=LeadVehicleDistance.close,
+        traffic_state=TrafficState.clear,
+        lead_vehicle_status=LeadVehicleStatus.none,
+        lead_vehicle_distance=LeadVehicleDistance.far,
         stopped_vehicle_detected=False,
         hazard_detected=False,
         pedestrian_detected=False,
         cyclist_detected=False,
         possible_incident=False,
-        confidence=0.81
+        confidence=1.0
     )
 
 def get_mock_vehicle_profile() -> VehicleProfileInput:

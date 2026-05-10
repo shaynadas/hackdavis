@@ -10,13 +10,14 @@ from models import (
     PerceptionInput, RoadContextInput, VoiceTranscriptResponse,
     SpeakRequest, VoiceRecommendationResponse, VehicleProfileInput,
     TypedVINRequest, VINCaptureResponse, VINConfirmRequest, VINConfirmResponse,
-    YesNoVoiceResponse
+    YesNoVoiceResponse, TelemetryInput
 )
 from eco_optimizer import get_recommendation, model_to_dict
 from mock_data import get_demo_recommendation_payload, get_mock_traffic, get_mock_perception, get_mock_road_context
 from services.vin_service import decode_vin
 from services.elevation_service import get_elevation, calculate_grade
 from services.traffic_service import get_traffic_context, get_tomtom_traffic
+from services.speed_limit_service import get_speed_limit
 from services.elevenlabs_service import (
     is_elevenlabs_stt_configured, is_elevenlabs_tts_configured,
     transcribe_audio_with_elevenlabs, extract_vin_from_text,
@@ -39,6 +40,9 @@ latest_location: Optional[LocationInput] = None
 latest_perception: Optional[PerceptionInput] = None
 latest_road_context: Optional[RoadContextInput] = None
 latest_vehicle_profile: Optional[VehicleProfileInput] = None
+latest_mobile_telemetry: Optional[TelemetryInput] = None
+previous_location_for_grade: Optional[LocationInput] = None
+latest_calculated_grade: float = 0.0
 vin_capture_sessions: dict = {}
 
 def parse_optional_json_form_field(value: Optional[str], fallback: Any) -> Any:
@@ -52,6 +56,47 @@ def parse_optional_json_form_field(value: Optional[str], fallback: Any) -> Any:
         return json.loads(value)
     except json.JSONDecodeError:
         return fallback
+
+@app.post("/telemetry")
+def receive_telemetry(payload: TelemetryInput):
+    global latest_mobile_telemetry, latest_location, previous_location_for_grade
+    latest_mobile_telemetry = payload
+    
+    if payload.gps:
+        # Update latest_location with telemetry gps data
+        speed_mph = payload.gps.speed * 2.23694 if payload.gps.speed else 0.0
+        
+        if not latest_location:
+            latest_location = LocationInput(
+                lat=payload.gps.latitude,
+                lon=payload.gps.longitude,
+                speed_mph=speed_mph,
+                heading_deg=payload.gps.heading
+            )
+            previous_location_for_grade = latest_location
+        else:
+            # If we've moved significantly, store previous location to calculate grade
+            if previous_location_for_grade:
+                from services.elevation_service import haversine_distance_m
+                dist = haversine_distance_m(
+                    previous_location_for_grade.lat, previous_location_for_grade.lon,
+                    payload.gps.latitude, payload.gps.longitude
+                )
+                if dist > 15.0: # Only update reference if we moved 15+ meters to get an accurate grade
+                    previous_location_for_grade = latest_location
+                    
+            latest_location.lat = payload.gps.latitude
+            latest_location.lon = payload.gps.longitude
+            latest_location.speed_mph = speed_mph
+            latest_location.heading_deg = payload.gps.heading
+            
+    return {"status": "ok", "message": "Telemetry received"}
+
+@app.get("/telemetry/latest")
+def get_latest_telemetry():
+    if not latest_mobile_telemetry:
+        raise HTTPException(status_code=404, detail="No telemetry available")
+    return latest_mobile_telemetry
 
 @app.get("/health")
 def health_check():
@@ -79,6 +124,7 @@ def get_demo_recommendation():
 
 @app.get("/recommendation/live")
 async def get_live_recommendation():
+    global latest_calculated_grade
     if not latest_location:
         raise HTTPException(status_code=400, detail="No location data available. Stream GPS data to /location/update first.")
     
@@ -89,6 +135,7 @@ async def get_live_recommendation():
     if latest_vehicle_profile:
         payload.vehicle_profile = latest_vehicle_profile
     
+    # 1. Fetch Traffic
     traffic = await get_traffic_context(latest_location.lat, latest_location.lon)
     if traffic.get("speed_mph") is not None:
         payload.road_context.traffic_speed_mph = traffic.get("speed_mph")
@@ -96,6 +143,27 @@ async def get_live_recommendation():
         payload.road_context.congestion_level = traffic.get("congestion_level")
     if traffic.get("incident_ahead") is not None:
         payload.road_context.incident_ahead = traffic.get("incident_ahead")
+        
+    # 2. Fetch Speed Limit
+    speed_limit_info = await get_speed_limit(latest_location.lat, latest_location.lon)
+    if speed_limit_info.get("speed_limit_mph"):
+        payload.road_context.speed_limit_mph = speed_limit_info["speed_limit_mph"]
+        
+    # 3. Calculate Live Grade (Requires previous location)
+    if previous_location_for_grade:
+        from models import CoordinateInput
+        from services.elevation_service import haversine_distance_m
+        dist = haversine_distance_m(
+            previous_location_for_grade.lat, previous_location_for_grade.lon,
+            latest_location.lat, latest_location.lon
+        )
+        if dist > 10.0:
+            start_c = CoordinateInput(lat=previous_location_for_grade.lat, lon=previous_location_for_grade.lon)
+            end_c = CoordinateInput(lat=latest_location.lat, lon=latest_location.lon)
+            grade_res = await calculate_grade(start_c, end_c)
+            latest_calculated_grade = grade_res.get("grade_percent", latest_calculated_grade)
+            
+    payload.road_context.road_grade_percent = latest_calculated_grade
         
     return get_recommendation(payload)
 

@@ -76,6 +76,8 @@ export const api = {
   
   getLatestLocation: () => safeGet<LocationInput>(`${API_BASE}/location/latest`),
   
+  getLatestTelemetry: () => safeGet<any>(`${API_BASE}/telemetry/latest`),
+  
   getLatestPerception: () => safeGet<PerceptionInput>(`${API_BASE}/perception/latest`),
   
   getLatestRoadContext: () => safeGet<RoadContextInput>(`${API_BASE}/road-context/latest`),

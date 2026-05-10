@@ -1,7 +1,17 @@
 #!/bin/bash
 
-echo "🚀 Starting Eco-Driving Copilot..."
+# Get local IP address (macOS specific)
+LOCAL_IP=$(ipconfig getifaddr en0)
+if [ -z "$LOCAL_IP" ]; then
+    # Fallback if en0 is not the active interface
+    LOCAL_IP=$(ifconfig | grep "inet " | grep -Fv 127.0.0.1 | awk '{print $2}' | head -n 1)
+fi
 
+echo -e "\n\033[1;36m=================================================================\033[0m"
+echo -e "\033[1;32m🚀 Starting Eco-Driving Copilot...\033[0m"
+echo -e "\033[1;33m📱 EXPO TELEMETRY URL (Enter this in your phone app):\033[0m"
+echo -e "\033[1;37;44m    http://${LOCAL_IP}:8000/telemetry    \033[0m"
+echo -e "\033[1;36m=================================================================\033[0m\n"
 # Setup cleanup so Ctrl+C kills everything gracefully
 cleanup() {
     echo ""
@@ -20,11 +30,10 @@ cd backend
 uvicorn main:app --host 0.0.0.0 --port 8000 &
 cd ..
 
-# 2. Start CV Pipeline
-# Defaults to "mock". Run `./start.sh 0` to use your webcam!
-SOURCE=${1:-mock}
-echo "📸 Starting CV Pipeline with source: $SOURCE (Port 8001)..."
-python cv_pipeline.py $SOURCE &
+# 2. Start CV Pipeline (Removed live camera feed)
+# SOURCE=${1:-mock}
+# echo "📸 Starting CV Pipeline with source: $SOURCE (Port 8001)..."
+# python cv_pipeline.py $SOURCE &
 
 # 3. Start Frontend
 echo "💻 Starting Frontend Dashboard..."
