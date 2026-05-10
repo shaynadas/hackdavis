@@ -49,7 +49,7 @@ export default function App() {
 
   const sim = useSimulator({
     active: simulationActive,
-    speedMul: 0.5,  // Slow down to 0.5x speed (2 seconds per frame instead of 1)
+    speedMul: 1,  // Real-time playback (1 second per frame, 2 minutes total)
     loop: false,
     onFrame: (frame, idx) => {
       // Primary fix: Mirror frame data directly to dashboard state
