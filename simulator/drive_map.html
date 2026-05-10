@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Backseat Driver — 2-min Davis Drive Simulator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    :root {
+      --bg: #0a0a0c;
+      --panel: #14151a;
+      --border: #2a2c34;
+      --text: #e7e9ee;
+      --muted: #8b909c;
+      --accent: #4fd1c5;
+      --warn: #facc15;
+      --bad: #f87171;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; background: var(--bg); color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    .layout { display: grid; grid-template-columns: 1fr 360px; height: 100vh; }
+    #map { height: 100%; background: #1a1c22; }
+    .leaflet-container { background: #1a1c22; }
+    .sidebar { border-left: 1px solid var(--border); padding: 14px 16px; overflow-y: auto;
+      background: var(--panel); }
+    h1 { font-size: 14px; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--muted); margin: 0 0 12px; }
+    .controls { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+    button { background: #1f2129; color: var(--text); border: 1px solid var(--border);
+      padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; }
+    button:hover { background: #2a2d36; }
+    button.primary { background: var(--accent); color: #0a0a0c; border-color: var(--accent); font-weight: 600; }
+    .speed-pills { display: inline-flex; gap: 4px; }
+    .speed-pills button.active { background: var(--accent); color: #0a0a0c; border-color: var(--accent); }
+    .timeline { width: 100%; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 14px; margin-top: 12px; }
+    .stat { display: flex; flex-direction: column; padding: 8px 10px;
+      background: #181a21; border: 1px solid var(--border); border-radius: 6px; }
+    .stat .k { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+    .stat .v { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 16px; color: #fff; }
+    .stat.big .v { font-size: 22px; color: var(--accent); }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px;
+      font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+    .badge.green { background: #14342a; color: #6ee7b7; }
+    .badge.yellow { background: #3a300d; color: #fde68a; }
+    .badge.red { background: #3a0f0f; color: #fca5a5; }
+    .section-title { font-size: 11px; text-transform: uppercase; letter-spacing: .1em;
+      color: var(--muted); margin: 16px 0 6px; }
+    .lead-bar { height: 8px; background: #1f2129; border-radius: 4px; overflow: hidden;
+      border: 1px solid var(--border); }
+    .lead-bar > div { height: 100%; background: linear-gradient(90deg, var(--bad), var(--warn), var(--accent)); }
+    .voice { background: #181a21; border: 1px solid var(--border); border-radius: 6px;
+      padding: 10px 12px; font-size: 13px; color: #d1d5db; min-height: 40px; }
+    .legend { font-size: 11px; color: var(--muted); margin-top: 14px; line-height: 1.6; }
+    .pill { background: #181a21; border: 1px solid var(--border); padding: 2px 8px;
+      border-radius: 999px; font-size: 11px; }
+    /* Car marker */
+    .car-marker { width: 22px; height: 22px; border-radius: 50%;
+      background: var(--accent); box-shadow: 0 0 0 4px rgba(79,209,197,.25);
+      transform: translate(-50%, -50%); position: relative; }
+    .car-marker::after { content: ""; position: absolute; top: -8px; left: 50%;
+      width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent;
+      border-bottom: 10px solid var(--accent); transform: translateX(-50%) rotate(0deg); }
+    /* Inline error */
+    .error { color: var(--bad); font-size: 12px; padding: 8px; border: 1px solid #582; border-radius: 6px;
+      background: #2a0e0e; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <div id="map"></div>
+  <div class="sidebar">
+    <h1>Backseat Driver — 2-min Davis Drive</h1>
+    <div id="loadError" class="error" style="display:none"></div>
+
+    <div class="controls">
+      <button id="playBtn" class="primary">▶ Play</button>
+      <button id="pauseBtn">⏸ Pause</button>
+      <button id="restartBtn">⟲ Restart</button>
+      <span class="speed-pills">
+        <button data-speed="1" class="active">1×</button>
+        <button data-speed="2">2×</button>
+        <button data-speed="4">4×</button>
+        <button data-speed="8">8×</button>
+      </span>
+    </div>
+
+    <input id="timeline" class="timeline" type="range" min="0" max="120" step="1" value="0" />
+    <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--muted);">
+      <span id="tNow">t = 0 s</span>
+      <span id="tMax">/ 120 s</span>
+    </div>
+
+    <div class="grid2">
+      <div class="stat big"><span class="k">Current speed</span><span class="v"><span id="curSpeed">0.0</span> mph</span></div>
+      <div class="stat big"><span class="k">Optimal speed</span><span class="v" style="color:#fde68a"><span id="optSpeed">--</span> mph</span></div>
+      <div class="stat"><span class="k">Speed limit</span><span class="v"><span id="limit">--</span> mph</span></div>
+      <div class="stat"><span class="k">Heading</span><span class="v"><span id="heading">--</span>°</span></div>
+      <div class="stat"><span class="k">Est. RPM (current)</span><span class="v"><span id="curRpm">--</span></span></div>
+      <div class="stat"><span class="k">Target RPM (optimal)</span><span class="v" style="color:#fde68a"><span id="optRpm">--</span></span></div>
+      <div class="stat"><span class="k">Gear</span><span class="v">G<span id="curGear">-</span> → G<span id="optGear">-</span></span></div>
+      <div class="stat"><span class="k">Eco score</span><span class="v"><span id="ecoScore">--</span>/100</span></div>
+    </div>
+
+    <div class="section-title">Lead vehicle</div>
+    <div class="grid2">
+      <div class="stat"><span class="k">Status</span><span class="v" id="leadStatus">--</span></div>
+      <div class="stat"><span class="k">Distance</span><span class="v"><span id="leadDist">--</span> m</span></div>
+    </div>
+    <div class="lead-bar" style="margin-top:6px;"><div id="leadBar" style="width:0%"></div></div>
+
+    <div class="section-title">Road context</div>
+    <div class="grid2">
+      <div class="stat"><span class="k">Road</span><span class="v" id="road">--</span></div>
+      <div class="stat"><span class="k">Grade</span><span class="v"><span id="grade">--</span>%</span></div>
+      <div class="stat"><span class="k">Traffic speed</span><span class="v"><span id="trafSpd">--</span> mph</span></div>
+      <div class="stat"><span class="k">Congestion</span><span class="v" id="congestion">--</span></div>
+      <div class="stat"><span class="k">Stop ahead</span><span class="v"><span id="stopAhead">--</span> m</span></div>
+      <div class="stat"><span class="k">Incident</span><span class="v" id="incident">no</span></div>
+    </div>
+
+    <div class="section-title">Perception flags</div>
+    <div id="flags"></div>
+
+    <div class="section-title">Voice line</div>
+    <div class="voice" id="voice">Press ▶ Play to start the simulation.</div>
+
+    <div class="section-title">Safety</div>
+    <span id="safety" class="badge green">SAFE</span>
+
+    <div class="legend">
+      Tiles © OpenStreetMap contributors. Route follows real Davis streets:
+      3rd&nbsp;St → F&nbsp;St → 1st&nbsp;St.<br>
+      Set <span class="pill">?live=1</span> to also poll the local backend
+      (<code>http://localhost:8000/recommendation/live</code>) and overlay
+      the optimizer's actual response.
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(async function() {
+  const params = new URLSearchParams(location.search);
+  const useLive = params.get("live") === "1";
+  const apiBase = params.get("api") || "http://localhost:8000";
+
+  // ---- Load timeline JSON --------------------------------------------------
+  let timeline;
+  try {
+    const res = await fetch("drive_timeline.json", { cache: "no-store" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    timeline = await res.json();
+  } catch (e) {
+    document.getElementById("loadError").style.display = "block";
+    document.getElementById("loadError").textContent =
+      "Could not load drive_timeline.json. Run generate_drive.py first, then serve this folder over HTTP (python3 -m http.server) and reload.";
+    return;
+  }
+  const frames = timeline.frames;
+  const meta = timeline.meta;
+  document.getElementById("tMax").textContent = "/ " + (frames.length - 1) + " s";
+  const range = document.getElementById("timeline");
+  range.max = frames.length - 1;
+
+  // ---- Map ----------------------------------------------------------------
+  const lats = frames.map(f => f.location.lat);
+  const lons = frames.map(f => f.location.lon);
+  const center = [
+    (Math.min(...lats) + Math.max(...lats)) / 2,
+    (Math.min(...lons) + Math.max(...lons)) / 2,
+  ];
+  const map = L.map("map", { zoomControl: true }).setView(center, 16);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "© OpenStreetMap contributors",
+    maxZoom: 19,
+  }).addTo(map);
+
+  const routeLatLngs = frames.map(f => [f.location.lat, f.location.lon]);
+  L.polyline(routeLatLngs, { color: "#4fd1c5", weight: 5, opacity: 0.85 }).addTo(map);
+  // Driven trail (grows as we play)
+  const trail = L.polyline([], { color: "#facc15", weight: 4, opacity: 0.95 }).addTo(map);
+
+  // Waypoint pins
+  meta.waypoints.forEach(wp => {
+    L.circleMarker([wp.lat, wp.lon], {
+      radius: 4, color: "#fff", weight: 1, fillColor: "#4fd1c5", fillOpacity: 0.9,
+    }).bindTooltip(wp.name + " · " + wp.road + " · " + wp.speed_limit_mph + " mph",
+      { direction: "top" }).addTo(map);
+  });
+
+  // Car marker
+  const carIcon = L.divIcon({ className: "", html: '<div class="car-marker" id="car"></div>',
+    iconSize: [22, 22], iconAnchor: [11, 11] });
+  const carMarker = L.marker(routeLatLngs[0], { icon: carIcon, zIndexOffset: 1000 }).addTo(map);
+
+  map.fitBounds(L.latLngBounds(routeLatLngs).pad(0.3));
+
+  // ---- Engine RPM helper (mirrors backend/vehicle_profile.py math) --------
+  // Tire diameter (m) = (rim_in*25.4 + 2*tire_width*aspect_ratio/100) / 1000
+  function tireCircM(vp) {
+    const rimMm = vp.rim_in * 25.4;
+    const sideMm = (vp.tire_width * vp.aspect_ratio) / 100 * 2;
+    return Math.PI * (rimMm + sideMm) / 1000;
+  }
+  function rpmAt(speedMph, gear, vp) {
+    if (!vp || !vp.gear_ratios || !vp.gear_ratios[String(gear)]) return null;
+    const speedMs = speedMph * 0.44704;
+    const wheelRps = speedMs / tireCircM(vp);
+    const driveshaftRps = wheelRps * vp.final_drive_ratio;
+    const engineRps = driveshaftRps * vp.gear_ratios[String(gear)];
+    return Math.max(0, Math.round(engineRps * 60));
+  }
+  // Pick the gear whose RPM is closest to ~2000 (eco target) above 5 mph
+  function bestGear(speedMph, vp) {
+    if (speedMph < 1.5) return 1;
+    let best = 1, bestErr = Infinity;
+    for (let g = 1; g <= 6; g++) {
+      const r = rpmAt(speedMph, g, vp);
+      if (!r || r < 800 || r > 5500) continue;
+      const err = Math.abs(r - 1900);
+      if (err < bestErr) { bestErr = err; best = g; }
+    }
+    return best;
+  }
+
+  // ---- "Optimal" speed heuristic (so the demo works without the backend) -
+  // Mirrors the safety-overrides-fuel-economy logic in eco_optimizer.py at a
+  // high level; if ?live=1 is set we replace this with the real backend reply.
+  function localOptimal(frame) {
+    const limit = frame.road_context.speed_limit_mph;
+    const lead = frame.perception.lead_vehicle_distance_m;
+    const status = frame.perception.lead_vehicle_status;
+    const trafSpd = frame.road_context.traffic_speed_mph || limit;
+    const cong = frame.road_context.congestion_level;
+    const ped = frame.perception.pedestrian_detected;
+    const incident = frame.road_context.incident_ahead;
+
+    let target = Math.min(limit - 2, trafSpd);
+    if (status === "braking") target = Math.min(target, Math.max(0, lead * 0.6));
+    if (status === "stopped") target = 0;
+    if (cong === "moderate") target = Math.min(target, limit - 5);
+    if (cong === "heavy") target = Math.min(target, limit - 10);
+    if (ped || incident) target = Math.min(target, 12);
+    target = Math.max(0, Math.round(target * 10) / 10);
+
+    let action = "maintain";
+    const cur = frame.location.speed_mph;
+    if (cur < target - 2) action = "accelerate_gently";
+    else if (cur > target + 4) action = "urgent_slow_down";
+    else if (cur > target + 1) action = "slow_down";
+    else if (target === 0 && cur > 0.5) action = "urgent_slow_down";
+    if (cur < 0.5 && target < 0.5) action = "idle";
+
+    let safety = "safe";
+    if (status === "braking" || cong === "heavy" || ped) safety = "caution";
+    if (status === "stopped" && cur > 5) safety = "urgent";
+    if (incident && cur > target + 2) safety = "urgent";
+
+    let voice = "Maintain " + cur.toFixed(0) + " mph.";
+    if (action === "accelerate_gently") voice = "Ease up to " + target.toFixed(0) + " mph.";
+    else if (action === "slow_down") voice = "Coast down toward " + target.toFixed(0) + " mph.";
+    else if (action === "urgent_slow_down") voice = "Slow down — target " + target.toFixed(0) + " mph.";
+    else if (action === "idle") voice = "Hold at the stop.";
+    if (ped) voice = "Pedestrian ahead — slow to " + target.toFixed(0) + " mph.";
+    if (status === "stopped" && cur > 0.5) voice = "Brake — traffic stopped ahead.";
+
+    const ecoBase = 70;
+    let eco = ecoBase
+      - Math.min(20, Math.abs(cur - target) * 1.5)
+      - (cong === "heavy" ? 10 : cong === "moderate" ? 4 : 0)
+      + (status === "moving" || status === "none" ? 5 : 0);
+    eco = Math.max(0, Math.min(100, Math.round(eco)));
+
+    return { target, action, safety, voice, eco };
+  }
+
+  // ---- Render helpers -----------------------------------------------------
+  function setBadge(el, level) {
+    el.classList.remove("green","yellow","red");
+    el.textContent = level.toUpperCase();
+    if (level === "safe") el.classList.add("green");
+    else if (level === "caution") el.classList.add("yellow");
+    else el.classList.add("red");
+  }
+
+  function flagsHTML(p) {
+    const flags = [];
+    if (p.pedestrian_detected) flags.push('<span class="badge red">PEDESTRIAN</span>');
+    if (p.cyclist_detected) flags.push('<span class="badge yellow">CYCLIST</span>');
+    if (p.hazard_detected) flags.push('<span class="badge red">HAZARD</span>');
+    if (p.stopped_vehicle_detected) flags.push('<span class="badge yellow">STOPPED VEH</span>');
+    if (p.possible_incident) flags.push('<span class="badge red">INCIDENT</span>');
+    if (p.traffic_state && p.traffic_state !== "clear")
+      flags.push('<span class="badge yellow">TRAFFIC: ' + p.traffic_state.toUpperCase() + '</span>');
+    if (!flags.length) flags.push('<span class="pill">all clear</span>');
+    return flags.join(" ");
+  }
+
+  let liveSummary = null;   // most recent /recommendation/live summary, if used
+  async function maybePollLive() {
+    if (!useLive) return;
+    try {
+      const r = await fetch(apiBase + "/recommendation/live");
+      if (r.ok) liveSummary = (await r.json()).summary;
+    } catch (e) { /* ignore */ }
+  }
+
+  function renderFrame(i) {
+    const f = frames[i];
+    const vp = meta.vehicle_profile;
+    carMarker.setLatLng([f.location.lat, f.location.lon]);
+    // Rotate the arrow to match heading
+    const carEl = document.getElementById("car");
+    if (carEl) carEl.style.setProperty("--heading", f.location.heading_deg + "deg");
+    if (carEl) carEl.querySelector ? null : null;
+    if (carEl) carEl.style.transform = "translate(-50%,-50%) rotate(" + f.location.heading_deg + "deg)";
+
+    trail.setLatLngs(routeLatLngs.slice(0, i + 1));
+
+    document.getElementById("tNow").textContent = "t = " + f.t + " s";
+    range.value = i;
+
+    document.getElementById("curSpeed").textContent = f.location.speed_mph.toFixed(1);
+    document.getElementById("heading").textContent = f.location.heading_deg.toFixed(0);
+    document.getElementById("limit").textContent = f.road_context.speed_limit_mph.toFixed(0);
+    document.getElementById("road").textContent = f.road;
+    document.getElementById("grade").textContent = (f.road_context.road_grade_percent || 0).toFixed(1);
+    document.getElementById("trafSpd").textContent = (f.road_context.traffic_speed_mph || 0).toFixed(1);
+    document.getElementById("congestion").textContent = f.road_context.congestion_level;
+    document.getElementById("stopAhead").textContent =
+      f.road_context.upcoming_stop_distance_m == null ? "—"
+        : f.road_context.upcoming_stop_distance_m.toFixed(0);
+    document.getElementById("incident").textContent = f.road_context.incident_ahead ? "YES" : "no";
+
+    document.getElementById("leadStatus").textContent = f.perception.lead_vehicle_status;
+    document.getElementById("leadDist").textContent = f.perception.lead_vehicle_distance_m.toFixed(1);
+    const leadPct = Math.max(0, Math.min(100, (f.perception.lead_vehicle_distance_m / 120) * 100));
+    document.getElementById("leadBar").style.width = leadPct + "%";
+
+    document.getElementById("flags").innerHTML = flagsHTML(f.perception);
+
+    // Optimizer overlay (live or local heuristic)
+    let opt;
+    if (useLive && liveSummary) {
+      opt = {
+        target: liveSummary.optimal_speed_now_mph,
+        action: liveSummary.recommended_action,
+        safety: liveSummary.safety_level,
+        eco: liveSummary.eco_score,
+        voice: "(live) " + (liveSummary.voice_line || ""),
+        gear: liveSummary.recommended_gear,
+        rpm: liveSummary.estimated_rpm_at_optimal_speed,
+      };
+    } else {
+      const local = localOptimal(f);
+      opt = {
+        target: local.target,
+        action: local.action,
+        safety: local.safety,
+        eco: local.eco,
+        voice: local.voice,
+      };
+      opt.gear = bestGear(opt.target, vp);
+      opt.rpm = rpmAt(opt.target, opt.gear, vp);
+    }
+    const curGear = bestGear(f.location.speed_mph, vp);
+    const curRpm = rpmAt(f.location.speed_mph, curGear, vp);
+
+    document.getElementById("optSpeed").textContent = (opt.target ?? 0).toFixed(1);
+    document.getElementById("curRpm").textContent = curRpm == null ? "--" : curRpm;
+    document.getElementById("optRpm").textContent = opt.rpm == null ? "--" : opt.rpm;
+    document.getElementById("curGear").textContent = curGear || "-";
+    document.getElementById("optGear").textContent = opt.gear || "-";
+    document.getElementById("ecoScore").textContent = opt.eco;
+    document.getElementById("voice").textContent = opt.voice || "—";
+    setBadge(document.getElementById("safety"), opt.safety || "safe");
+  }
+
+  // ---- Playback engine ----------------------------------------------------
+  let idx = 0;
+  let playing = false;
+  let speedMul = 1;
+  let lastTick = 0;
+
+  function step(now) {
+    if (!playing) return;
+    if (!lastTick) lastTick = now;
+    const dt = (now - lastTick) / 1000;  // seconds since last animation frame
+    lastTick = now;
+    idx += dt * speedMul;
+    if (idx >= frames.length - 1) {
+      idx = frames.length - 1;
+      playing = false;
+    }
+    renderFrame(Math.floor(idx));
+    if (playing) requestAnimationFrame(step);
+  }
+
+  // Poll backend on its own interval if live mode is on
+  if (useLive) setInterval(maybePollLive, 1500);
+
+  document.getElementById("playBtn").addEventListener("click", () => {
+    if (idx >= frames.length - 1) idx = 0;
+    if (playing) return;
+    playing = true; lastTick = 0;
+    requestAnimationFrame(step);
+  });
+  document.getElementById("pauseBtn").addEventListener("click", () => { playing = false; });
+  document.getElementById("restartBtn").addEventListener("click", () => {
+    playing = false; idx = 0; renderFrame(0);
+  });
+  document.querySelectorAll(".speed-pills button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".speed-pills button").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      speedMul = parseFloat(btn.dataset.speed);
+    });
+  });
+  range.addEventListener("input", e => {
+    playing = false;
+    idx = parseInt(e.target.value, 10);
+    renderFrame(idx);
+  });
+
+  renderFrame(0);
+})();
+</script>
+</body>
+</html>

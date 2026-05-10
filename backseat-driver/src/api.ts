@@ -71,9 +71,20 @@ export function geolocationPositionToBackendPayload(position: GeolocationPositio
 
 export const api = {
   checkHealth: () => safeGet<{ status: string }>(`${API_BASE}/health`),
-  
+
   getLiveRecommendation: () => safeGet<RecommendationResponse>(`${API_BASE}/recommendation/live`),
-  
+
+  postRecommendation: (payload: {
+    location: any;
+    perception: any;
+    road_context: any;
+    vehicle_profile: any;
+  }) => fetchWithFallback<RecommendationResponse>('/recommendation', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }),
+
   getLatestLocation: () => safeGet<LocationInput>(`${API_BASE}/location/latest`),
   
   getLatestTelemetry: () => safeGet<any>(`${API_BASE}/telemetry/latest`),

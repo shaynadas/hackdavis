@@ -1,0 +1,3864 @@
+{
+  "meta": {
+    "city": "Davis, CA",
+    "duration_s": 120,
+    "frame_rate_hz": 1,
+    "frame_count": 121,
+    "total_distance_m": 1131.2,
+    "total_distance_mi": 0.703,
+    "waypoints": [
+      {
+        "name": "3rd & B",
+        "lat": 38.544,
+        "lon": -121.7438,
+        "speed_limit_mph": 25,
+        "road": "3rd St"
+      },
+      {
+        "name": "3rd & C",
+        "lat": 38.544,
+        "lon": -121.742,
+        "speed_limit_mph": 25,
+        "road": "3rd St"
+      },
+      {
+        "name": "3rd & D",
+        "lat": 38.544,
+        "lon": -121.7404,
+        "speed_limit_mph": 25,
+        "road": "3rd St"
+      },
+      {
+        "name": "3rd & E",
+        "lat": 38.544,
+        "lon": -121.7385,
+        "speed_limit_mph": 25,
+        "road": "3rd St"
+      },
+      {
+        "name": "3rd & F",
+        "lat": 38.544,
+        "lon": -121.7368,
+        "speed_limit_mph": 25,
+        "road": "3rd St"
+      },
+      {
+        "name": "F & 2nd",
+        "lat": 38.5424,
+        "lon": -121.7368,
+        "speed_limit_mph": 35,
+        "road": "F St"
+      },
+      {
+        "name": "F & 1st",
+        "lat": 38.5408,
+        "lon": -121.7368,
+        "speed_limit_mph": 35,
+        "road": "F St"
+      },
+      {
+        "name": "1st & E",
+        "lat": 38.5408,
+        "lon": -121.7385,
+        "speed_limit_mph": 30,
+        "road": "1st St"
+      },
+      {
+        "name": "1st & D",
+        "lat": 38.5408,
+        "lon": -121.7404,
+        "speed_limit_mph": 30,
+        "road": "1st St"
+      },
+      {
+        "name": "1st & C",
+        "lat": 38.5408,
+        "lon": -121.742,
+        "speed_limit_mph": 30,
+        "road": "1st St"
+      },
+      {
+        "name": "1st & B",
+        "lat": 38.5408,
+        "lon": -121.7438,
+        "speed_limit_mph": 30,
+        "road": "1st St"
+      }
+    ],
+    "vehicle_profile": {
+      "year": 2018,
+      "make": "Audi",
+      "model": "A4",
+      "trim": "2.0T",
+      "transmission_type": "automatic",
+      "mass_kg": 1600,
+      "tire_width": 245,
+      "aspect_ratio": 40,
+      "rim_in": 18,
+      "final_drive_ratio": 4.41,
+      "gear_ratios": {
+        "1": 3.69,
+        "2": 2.15,
+        "3": 1.41,
+        "4": 1.03,
+        "5": 0.79,
+        "6": 0.63
+      },
+      "vin": null
+    },
+    "schema_notes": "Each frame's `location`, `perception`, and `road_context` match the Pydantic models in backend/models.py. `lead_vehicle_distance_m` is an extra numeric field for the map UI; the backend's PerceptionInput uses the categorical `lead_vehicle_distance` (far/medium/close)."
+  },
+  "frames": [
+    {
+      "t": 0,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.7438,
+        "speed_mph": 0.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "none",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 120.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 1,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.743778,
+        "speed_mph": 4.2,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "none",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 120.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 2,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.743735,
+        "speed_mph": 8.4,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "none",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 120.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 3,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.74367,
+        "speed_mph": 12.6,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "none",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 120.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 4,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.743584,
+        "speed_mph": 16.8,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "none",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 120.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 5,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.743476,
+        "speed_mph": 21.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "none",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 120.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 6,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.743348,
+        "speed_mph": 25.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "none",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 120.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 7,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.743218,
+        "speed_mph": 25.2,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 95.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 8,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.74309,
+        "speed_mph": 24.96,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 94.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 9,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.742963,
+        "speed_mph": 24.73,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 93.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 10,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.742837,
+        "speed_mph": 24.55,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 92.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 11,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.742711,
+        "speed_mph": 24.43,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 91.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 12,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.742586,
+        "speed_mph": 24.4,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 90.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 13,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.74246,
+        "speed_mph": 24.47,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 89.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 14,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.742333,
+        "speed_mph": 24.62,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 88.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 15,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.742206,
+        "speed_mph": 24.83,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 87.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 16,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.742077,
+        "speed_mph": 25.07,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 86.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 17,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.741947,
+        "speed_mph": 25.3,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 85.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 18,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.741816,
+        "speed_mph": 25.48,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 84.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 19,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.741684,
+        "speed_mph": 25.58,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 83.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 20,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.741553,
+        "speed_mph": 25.59,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 82.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": 182.0,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 21,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.741422,
+        "speed_mph": 25.51,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 81.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": 175.5,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 22,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.741291,
+        "speed_mph": 25.35,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 80.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": 169.0,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 23,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.741162,
+        "speed_mph": 25.13,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 79.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": 162.5,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 24,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.741034,
+        "speed_mph": 24.9,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 78.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": 156.0,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 25,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.740907,
+        "speed_mph": 24.67,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 77.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": 149.5,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 26,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.740781,
+        "speed_mph": 24.5,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 76.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": 143.0,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 27,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.740656,
+        "speed_mph": 24.41,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 75.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": 136.5,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 28,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.74053,
+        "speed_mph": 24.41,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 74.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": 130.0,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 29,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.740407,
+        "speed_mph": 24.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "slowing",
+        "lead_vehicle_status": "braking",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 60.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 10.0,
+        "congestion_level": "moderate",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": 123.5,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 30,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.740294,
+        "speed_mph": 22.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "slowing",
+        "lead_vehicle_status": "braking",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 55.5,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 10.0,
+        "congestion_level": "moderate",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": 117.0,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 31,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.740196,
+        "speed_mph": 19.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "slowing",
+        "lead_vehicle_status": "braking",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 51.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 10.0,
+        "congestion_level": "moderate",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": 110.5,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 32,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.740114,
+        "speed_mph": 16.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "slowing",
+        "lead_vehicle_status": "braking",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 46.5,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 10.0,
+        "congestion_level": "moderate",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": 104.0,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 33,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.740047,
+        "speed_mph": 13.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "slowing",
+        "lead_vehicle_status": "braking",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 42.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 10.0,
+        "congestion_level": "moderate",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": 97.5,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 34,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.739996,
+        "speed_mph": 10.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "slowing",
+        "lead_vehicle_status": "braking",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 37.5,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 10.0,
+        "congestion_level": "moderate",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": 91.0,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 35,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.739955,
+        "speed_mph": 8.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "slowing",
+        "lead_vehicle_status": "braking",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 33.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 10.0,
+        "congestion_level": "moderate",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": 84.5,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 36,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.739924,
+        "speed_mph": 6.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "slowing",
+        "lead_vehicle_status": "braking",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 28.5,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 10.0,
+        "congestion_level": "moderate",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": 78.0,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 37,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.739903,
+        "speed_mph": 4.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "slowing",
+        "lead_vehicle_status": "braking",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 24.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 10.0,
+        "congestion_level": "moderate",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": 71.5,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 38,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.739893,
+        "speed_mph": 2.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "slowing",
+        "lead_vehicle_status": "braking",
+        "lead_vehicle_distance": "close",
+        "lead_vehicle_distance_m": 19.5,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 10.0,
+        "congestion_level": "moderate",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": 65.0,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 39,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.739888,
+        "speed_mph": 1.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "slowing",
+        "lead_vehicle_status": "braking",
+        "lead_vehicle_distance": "close",
+        "lead_vehicle_distance_m": 15.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 10.0,
+        "congestion_level": "moderate",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": 58.5,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 40,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.739888,
+        "speed_mph": 0.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "slowing",
+        "lead_vehicle_status": "braking",
+        "lead_vehicle_distance": "close",
+        "lead_vehicle_distance_m": 10.5,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 10.0,
+        "congestion_level": "moderate",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": 52.0,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 41,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.739888,
+        "speed_mph": 0.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "stopped",
+        "lead_vehicle_status": "stopped",
+        "lead_vehicle_distance": "close",
+        "lead_vehicle_distance_m": 6.5,
+        "stopped_vehicle_detected": true,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 10.0,
+        "congestion_level": "moderate",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": 45.5,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 42,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.739888,
+        "speed_mph": 0.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "stopped",
+        "lead_vehicle_status": "stopped",
+        "lead_vehicle_distance": "close",
+        "lead_vehicle_distance_m": 6.5,
+        "stopped_vehicle_detected": true,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 10.0,
+        "congestion_level": "moderate",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": 39.0,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 43,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.739888,
+        "speed_mph": 0.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "stopped",
+        "lead_vehicle_status": "stopped",
+        "lead_vehicle_distance": "close",
+        "lead_vehicle_distance_m": 6.5,
+        "stopped_vehicle_detected": true,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 10.0,
+        "congestion_level": "moderate",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": 32.5,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 44,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.739888,
+        "speed_mph": 0.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "stopped",
+        "lead_vehicle_status": "stopped",
+        "lead_vehicle_distance": "close",
+        "lead_vehicle_distance_m": 6.5,
+        "stopped_vehicle_detected": true,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 10.0,
+        "congestion_level": "moderate",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": 26.0,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 45,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.739888,
+        "speed_mph": 0.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "stopped",
+        "lead_vehicle_status": "stopped",
+        "lead_vehicle_distance": "close",
+        "lead_vehicle_distance_m": 6.5,
+        "stopped_vehicle_detected": true,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 10.0,
+        "congestion_level": "moderate",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": 19.5,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 46,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.739888,
+        "speed_mph": 0.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "stopped",
+        "lead_vehicle_status": "stopped",
+        "lead_vehicle_distance": "close",
+        "lead_vehicle_distance_m": 6.5,
+        "stopped_vehicle_detected": true,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 10.0,
+        "congestion_level": "moderate",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": 13.0,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 47,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.739888,
+        "speed_mph": 0.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "stopped",
+        "lead_vehicle_status": "stopped",
+        "lead_vehicle_distance": "close",
+        "lead_vehicle_distance_m": 6.5,
+        "stopped_vehicle_detected": true,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 10.0,
+        "congestion_level": "moderate",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": 6.5,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 48,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.739872,
+        "speed_mph": 3.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "close",
+        "lead_vehicle_distance_m": 8.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 49,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.739842,
+        "speed_mph": 6.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "close",
+        "lead_vehicle_distance_m": 12.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 50,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.73979,
+        "speed_mph": 10.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "close",
+        "lead_vehicle_distance_m": 16.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 51,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.739718,
+        "speed_mph": 14.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 20.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 52,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.739626,
+        "speed_mph": 18.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 24.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 53,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.739518,
+        "speed_mph": 21.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 28.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 54,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.739394,
+        "speed_mph": 24.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 32.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 55,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.739261,
+        "speed_mph": 26.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 36.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 56,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.739122,
+        "speed_mph": 27.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 40.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 57,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.738978,
+        "speed_mph": 28.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 44.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 58,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.738834,
+        "speed_mph": 28.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 48.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 59,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.73869,
+        "speed_mph": 28.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 52.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 60,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.738551,
+        "speed_mph": 27.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 56.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 61,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.738438,
+        "speed_mph": 22.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 75.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 62,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.738351,
+        "speed_mph": 17.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 75.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 63,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.738279,
+        "speed_mph": 14.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 75.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 64,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.738197,
+        "speed_mph": 16.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 75.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 65,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.738084,
+        "speed_mph": 22.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 75.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 66,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.737945,
+        "speed_mph": 27.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 75.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 67,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.737785,
+        "speed_mph": 31.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 75.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 68,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.737616,
+        "speed_mph": 33.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 75.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 69,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.737441,
+        "speed_mph": 34.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 75.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 70,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.737261,
+        "speed_mph": 35.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 75.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 25.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 71,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.737092,
+        "speed_mph": 33.0,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "moderate",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 60.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 21.2,
+        "congestion_level": "moderate",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 72,
+      "location": {
+        "lat": 38.544,
+        "lon": -121.736918,
+        "speed_mph": 33.72,
+        "heading_deg": 90.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "moderate",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 64.7,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 21.2,
+        "congestion_level": "moderate",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 73,
+      "location": {
+        "lat": 38.543955,
+        "lon": -121.7368,
+        "speed_mph": 34.26,
+        "heading_deg": 180.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "moderate",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 68.6,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 21.2,
+        "congestion_level": "moderate",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 74,
+      "location": {
+        "lat": 38.543816,
+        "lon": -121.7368,
+        "speed_mph": 34.5,
+        "heading_deg": 180.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "moderate",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 71.2,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 21.2,
+        "congestion_level": "moderate",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 75,
+      "location": {
+        "lat": 38.543678,
+        "lon": -121.7368,
+        "speed_mph": 34.36,
+        "heading_deg": 180.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "moderate",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 72.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 21.2,
+        "congestion_level": "moderate",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 76,
+      "location": {
+        "lat": 38.543542,
+        "lon": -121.7368,
+        "speed_mph": 33.9,
+        "heading_deg": 180.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "moderate",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 70.9,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 21.2,
+        "congestion_level": "moderate",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 77,
+      "location": {
+        "lat": 38.543408,
+        "lon": -121.7368,
+        "speed_mph": 33.21,
+        "heading_deg": 180.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "moderate",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 68.1,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 21.2,
+        "congestion_level": "moderate",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 78,
+      "location": {
+        "lat": 38.543278,
+        "lon": -121.7368,
+        "speed_mph": 32.47,
+        "heading_deg": 180.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "moderate",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 64.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 21.2,
+        "congestion_level": "moderate",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 79,
+      "location": {
+        "lat": 38.543149,
+        "lon": -121.7368,
+        "speed_mph": 31.86,
+        "heading_deg": 180.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "moderate",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 59.3,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 21.2,
+        "congestion_level": "moderate",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 80,
+      "location": {
+        "lat": 38.543023,
+        "lon": -121.7368,
+        "speed_mph": 31.53,
+        "heading_deg": 180.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "moderate",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 54.7,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 21.2,
+        "congestion_level": "moderate",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 81,
+      "location": {
+        "lat": 38.542896,
+        "lon": -121.7368,
+        "speed_mph": 31.56,
+        "heading_deg": 180.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "moderate",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 50.9,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 21.2,
+        "congestion_level": "moderate",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 82,
+      "location": {
+        "lat": 38.542767,
+        "lon": -121.7368,
+        "speed_mph": 31.94,
+        "heading_deg": 180.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "moderate",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 48.6,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 21.2,
+        "congestion_level": "moderate",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 83,
+      "location": {
+        "lat": 38.542636,
+        "lon": -121.7368,
+        "speed_mph": 32.58,
+        "heading_deg": 180.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "moderate",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 48.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 21.2,
+        "congestion_level": "moderate",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 84,
+      "location": {
+        "lat": 38.542502,
+        "lon": -121.7368,
+        "speed_mph": 33.32,
+        "heading_deg": 180.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "moderate",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 49.4,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 25.0,
+        "traffic_speed_mph": 21.2,
+        "congestion_level": "moderate",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "3rd St"
+    },
+    {
+      "t": 85,
+      "location": {
+        "lat": 38.542366,
+        "lon": -121.7368,
+        "speed_mph": 33.99,
+        "heading_deg": 180.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "moderate",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 52.4,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 35.0,
+        "traffic_speed_mph": 29.8,
+        "congestion_level": "moderate",
+        "road_grade_percent": 3.28,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "F St"
+    },
+    {
+      "t": 86,
+      "location": {
+        "lat": 38.542227,
+        "lon": -121.7368,
+        "speed_mph": 34.41,
+        "heading_deg": 180.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "moderate",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 56.6,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 35.0,
+        "traffic_speed_mph": 29.8,
+        "congestion_level": "moderate",
+        "road_grade_percent": 3.4,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "F St"
+    },
+    {
+      "t": 87,
+      "location": {
+        "lat": 38.542089,
+        "lon": -121.7368,
+        "speed_mph": 34.48,
+        "heading_deg": 180.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "moderate",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 61.4,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 35.0,
+        "traffic_speed_mph": 29.8,
+        "congestion_level": "moderate",
+        "road_grade_percent": 3.5,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "F St"
+    },
+    {
+      "t": 88,
+      "location": {
+        "lat": 38.541951,
+        "lon": -121.7368,
+        "speed_mph": 34.2,
+        "heading_deg": 180.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "moderate",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 65.9,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 35.0,
+        "traffic_speed_mph": 29.8,
+        "congestion_level": "moderate",
+        "road_grade_percent": 3.5,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "F St"
+    },
+    {
+      "t": 89,
+      "location": {
+        "lat": 38.541816,
+        "lon": -121.7368,
+        "speed_mph": 33.62,
+        "heading_deg": 180.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "moderate",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 69.5,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 35.0,
+        "traffic_speed_mph": 29.8,
+        "congestion_level": "moderate",
+        "road_grade_percent": 3.5,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "F St"
+    },
+    {
+      "t": 90,
+      "location": {
+        "lat": 38.541684,
+        "lon": -121.7368,
+        "speed_mph": 32.89,
+        "heading_deg": 180.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "moderate",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 71.6,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 35.0,
+        "traffic_speed_mph": 29.8,
+        "congestion_level": "moderate",
+        "road_grade_percent": 3.5,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "F St"
+    },
+    {
+      "t": 91,
+      "location": {
+        "lat": 38.541555,
+        "lon": -121.7368,
+        "speed_mph": 32.18,
+        "heading_deg": 180.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "moderate",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 71.9,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 35.0,
+        "traffic_speed_mph": 29.8,
+        "congestion_level": "moderate",
+        "road_grade_percent": 3.5,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "F St"
+    },
+    {
+      "t": 92,
+      "location": {
+        "lat": 38.541427,
+        "lon": -121.7368,
+        "speed_mph": 31.68,
+        "heading_deg": 180.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "moderate",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 70.3,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 35.0,
+        "traffic_speed_mph": 29.8,
+        "congestion_level": "moderate",
+        "road_grade_percent": 1.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "F St"
+    },
+    {
+      "t": 93,
+      "location": {
+        "lat": 38.541301,
+        "lon": -121.7368,
+        "speed_mph": 31.5,
+        "heading_deg": 180.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "moderate",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 67.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 35.0,
+        "traffic_speed_mph": 29.8,
+        "congestion_level": "moderate",
+        "road_grade_percent": 1.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "F St"
+    },
+    {
+      "t": 94,
+      "location": {
+        "lat": 38.541173,
+        "lon": -121.7368,
+        "speed_mph": 31.69,
+        "heading_deg": 180.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "moderate",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 62.7,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 35.0,
+        "traffic_speed_mph": 29.8,
+        "congestion_level": "moderate",
+        "road_grade_percent": 1.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "F St"
+    },
+    {
+      "t": 95,
+      "location": {
+        "lat": 38.541044,
+        "lon": -121.7368,
+        "speed_mph": 32.2,
+        "heading_deg": 180.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "moderate",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 57.9,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 35.0,
+        "traffic_speed_mph": 29.8,
+        "congestion_level": "moderate",
+        "road_grade_percent": 1.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "F St"
+    },
+    {
+      "t": 96,
+      "location": {
+        "lat": 38.540923,
+        "lon": -121.7368,
+        "speed_mph": 30.0,
+        "heading_deg": 180.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "slowing",
+        "lead_vehicle_status": "braking",
+        "lead_vehicle_distance": "close",
+        "lead_vehicle_distance_m": 35.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": true,
+        "pedestrian_detected": true,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 35.0,
+        "traffic_speed_mph": 15.8,
+        "congestion_level": "heavy",
+        "road_grade_percent": 1.0,
+        "upcoming_stop_distance_m": 45.0,
+        "incident_ahead": true
+      },
+      "road": "F St"
+    },
+    {
+      "t": 97,
+      "location": {
+        "lat": 38.540819,
+        "lon": -121.7368,
+        "speed_mph": 26.0,
+        "heading_deg": 180.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "slowing",
+        "lead_vehicle_status": "braking",
+        "lead_vehicle_distance": "close",
+        "lead_vehicle_distance_m": 31.5,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": true,
+        "pedestrian_detected": true,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 35.0,
+        "traffic_speed_mph": 15.8,
+        "congestion_level": "heavy",
+        "road_grade_percent": 1.0,
+        "upcoming_stop_distance_m": 40.0,
+        "incident_ahead": true
+      },
+      "road": "F St"
+    },
+    {
+      "t": 98,
+      "location": {
+        "lat": 38.5408,
+        "lon": -121.736889,
+        "speed_mph": 22.0,
+        "heading_deg": 270.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "slowing",
+        "lead_vehicle_status": "braking",
+        "lead_vehicle_distance": "close",
+        "lead_vehicle_distance_m": 28.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": true,
+        "pedestrian_detected": true,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 35.0,
+        "traffic_speed_mph": 15.8,
+        "congestion_level": "heavy",
+        "road_grade_percent": 1.0,
+        "upcoming_stop_distance_m": 35.0,
+        "incident_ahead": true
+      },
+      "road": "F St"
+    },
+    {
+      "t": 99,
+      "location": {
+        "lat": 38.5408,
+        "lon": -121.736982,
+        "speed_mph": 18.0,
+        "heading_deg": 270.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "slowing",
+        "lead_vehicle_status": "braking",
+        "lead_vehicle_distance": "close",
+        "lead_vehicle_distance_m": 24.5,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": true,
+        "pedestrian_detected": true,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 35.0,
+        "traffic_speed_mph": 15.8,
+        "congestion_level": "heavy",
+        "road_grade_percent": 1.0,
+        "upcoming_stop_distance_m": 30.0,
+        "incident_ahead": true
+      },
+      "road": "F St"
+    },
+    {
+      "t": 100,
+      "location": {
+        "lat": 38.5408,
+        "lon": -121.737054,
+        "speed_mph": 14.0,
+        "heading_deg": 270.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "slowing",
+        "lead_vehicle_status": "braking",
+        "lead_vehicle_distance": "close",
+        "lead_vehicle_distance_m": 21.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": true,
+        "pedestrian_detected": true,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 35.0,
+        "traffic_speed_mph": 15.8,
+        "congestion_level": "heavy",
+        "road_grade_percent": 1.0,
+        "upcoming_stop_distance_m": 25.0,
+        "incident_ahead": true
+      },
+      "road": "F St"
+    },
+    {
+      "t": 101,
+      "location": {
+        "lat": 38.5408,
+        "lon": -121.737115,
+        "speed_mph": 12.0,
+        "heading_deg": 270.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "slowing",
+        "lead_vehicle_status": "braking",
+        "lead_vehicle_distance": "close",
+        "lead_vehicle_distance_m": 17.5,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": true,
+        "pedestrian_detected": true,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 35.0,
+        "traffic_speed_mph": 15.8,
+        "congestion_level": "heavy",
+        "road_grade_percent": 1.0,
+        "upcoming_stop_distance_m": 20.0,
+        "incident_ahead": true
+      },
+      "road": "F St"
+    },
+    {
+      "t": 102,
+      "location": {
+        "lat": 38.5408,
+        "lon": -121.737177,
+        "speed_mph": 12.0,
+        "heading_deg": 270.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "slowing",
+        "lead_vehicle_status": "braking",
+        "lead_vehicle_distance": "close",
+        "lead_vehicle_distance_m": 14.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": true,
+        "pedestrian_detected": true,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 35.0,
+        "traffic_speed_mph": 15.8,
+        "congestion_level": "heavy",
+        "road_grade_percent": 1.0,
+        "upcoming_stop_distance_m": 15.0,
+        "incident_ahead": true
+      },
+      "road": "F St"
+    },
+    {
+      "t": 103,
+      "location": {
+        "lat": 38.5408,
+        "lon": -121.737239,
+        "speed_mph": 12.0,
+        "heading_deg": 270.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "slowing",
+        "lead_vehicle_status": "braking",
+        "lead_vehicle_distance": "close",
+        "lead_vehicle_distance_m": 10.5,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": true,
+        "pedestrian_detected": true,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 35.0,
+        "traffic_speed_mph": 15.8,
+        "congestion_level": "heavy",
+        "road_grade_percent": 1.0,
+        "upcoming_stop_distance_m": 10.0,
+        "incident_ahead": true
+      },
+      "road": "F St"
+    },
+    {
+      "t": 104,
+      "location": {
+        "lat": 38.5408,
+        "lon": -121.737301,
+        "speed_mph": 12.0,
+        "heading_deg": 270.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "slowing",
+        "lead_vehicle_status": "braking",
+        "lead_vehicle_distance": "close",
+        "lead_vehicle_distance_m": 7.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": true,
+        "pedestrian_detected": true,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 35.0,
+        "traffic_speed_mph": 15.8,
+        "congestion_level": "heavy",
+        "road_grade_percent": 1.0,
+        "upcoming_stop_distance_m": 5.0,
+        "incident_ahead": true
+      },
+      "road": "F St"
+    },
+    {
+      "t": 105,
+      "location": {
+        "lat": 38.5408,
+        "lon": -121.737352,
+        "speed_mph": 10.0,
+        "heading_deg": 270.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 65.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 35.0,
+        "traffic_speed_mph": 15.8,
+        "congestion_level": "heavy",
+        "road_grade_percent": 1.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "F St"
+    },
+    {
+      "t": 106,
+      "location": {
+        "lat": 38.5408,
+        "lon": -121.737398,
+        "speed_mph": 9.0,
+        "heading_deg": 270.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 65.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 35.0,
+        "traffic_speed_mph": 15.8,
+        "congestion_level": "heavy",
+        "road_grade_percent": 1.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "F St"
+    },
+    {
+      "t": 107,
+      "location": {
+        "lat": 38.5408,
+        "lon": -121.73746,
+        "speed_mph": 12.0,
+        "heading_deg": 270.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 65.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 35.0,
+        "traffic_speed_mph": 15.8,
+        "congestion_level": "heavy",
+        "road_grade_percent": 1.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "F St"
+    },
+    {
+      "t": 108,
+      "location": {
+        "lat": 38.5408,
+        "lon": -121.737542,
+        "speed_mph": 16.0,
+        "heading_deg": 270.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 65.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 35.0,
+        "traffic_speed_mph": 15.8,
+        "congestion_level": "heavy",
+        "road_grade_percent": 1.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "F St"
+    },
+    {
+      "t": 109,
+      "location": {
+        "lat": 38.5408,
+        "lon": -121.737645,
+        "speed_mph": 20.0,
+        "heading_deg": 270.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 65.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 35.0,
+        "traffic_speed_mph": 15.8,
+        "congestion_level": "heavy",
+        "road_grade_percent": 1.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "F St"
+    },
+    {
+      "t": 110,
+      "location": {
+        "lat": 38.5408,
+        "lon": -121.737763,
+        "speed_mph": 23.0,
+        "heading_deg": 270.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 65.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 35.0,
+        "traffic_speed_mph": 15.8,
+        "congestion_level": "heavy",
+        "road_grade_percent": 1.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "F St"
+    },
+    {
+      "t": 111,
+      "location": {
+        "lat": 38.5408,
+        "lon": -121.737892,
+        "speed_mph": 25.0,
+        "heading_deg": 270.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 65.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 35.0,
+        "traffic_speed_mph": 15.8,
+        "congestion_level": "heavy",
+        "road_grade_percent": 1.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "F St"
+    },
+    {
+      "t": 112,
+      "location": {
+        "lat": 38.5408,
+        "lon": -121.73803,
+        "speed_mph": 27.0,
+        "heading_deg": 270.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 65.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 35.0,
+        "traffic_speed_mph": 15.8,
+        "congestion_level": "heavy",
+        "road_grade_percent": 1.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "F St"
+    },
+    {
+      "t": 113,
+      "location": {
+        "lat": 38.5408,
+        "lon": -121.738174,
+        "speed_mph": 28.0,
+        "heading_deg": 270.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 65.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 35.0,
+        "traffic_speed_mph": 15.8,
+        "congestion_level": "heavy",
+        "road_grade_percent": 1.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "F St"
+    },
+    {
+      "t": 114,
+      "location": {
+        "lat": 38.5408,
+        "lon": -121.738318,
+        "speed_mph": 28.0,
+        "heading_deg": 270.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "moving",
+        "lead_vehicle_distance": "medium",
+        "lead_vehicle_distance_m": 65.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 35.0,
+        "traffic_speed_mph": 15.8,
+        "congestion_level": "heavy",
+        "road_grade_percent": 1.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "F St"
+    },
+    {
+      "t": 115,
+      "location": {
+        "lat": 38.5408,
+        "lon": -121.738452,
+        "speed_mph": 26.0,
+        "heading_deg": 270.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "none",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 100.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 35.0,
+        "traffic_speed_mph": 35.0,
+        "congestion_level": "low",
+        "road_grade_percent": 1.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "F St"
+    },
+    {
+      "t": 116,
+      "location": {
+        "lat": 38.5408,
+        "lon": -121.73857,
+        "speed_mph": 23.0,
+        "heading_deg": 270.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "none",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 100.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 30.0,
+        "traffic_speed_mph": 30.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "1st St"
+    },
+    {
+      "t": 117,
+      "location": {
+        "lat": 38.5408,
+        "lon": -121.738668,
+        "speed_mph": 19.0,
+        "heading_deg": 270.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "none",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 100.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 30.0,
+        "traffic_speed_mph": 30.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "1st St"
+    },
+    {
+      "t": 118,
+      "location": {
+        "lat": 38.5408,
+        "lon": -121.73874,
+        "speed_mph": 14.0,
+        "heading_deg": 270.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "none",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 100.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 30.0,
+        "traffic_speed_mph": 30.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "1st St"
+    },
+    {
+      "t": 119,
+      "location": {
+        "lat": 38.5408,
+        "lon": -121.738781,
+        "speed_mph": 8.0,
+        "heading_deg": 270.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "none",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 100.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 30.0,
+        "traffic_speed_mph": 30.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "1st St"
+    },
+    {
+      "t": 120,
+      "location": {
+        "lat": 38.5408,
+        "lon": -121.738781,
+        "speed_mph": 0.0,
+        "heading_deg": 270.0,
+        "accuracy_m": 5.0
+      },
+      "perception": {
+        "traffic_state": "clear",
+        "lead_vehicle_status": "none",
+        "lead_vehicle_distance": "far",
+        "lead_vehicle_distance_m": 100.0,
+        "stopped_vehicle_detected": false,
+        "hazard_detected": false,
+        "pedestrian_detected": false,
+        "cyclist_detected": false,
+        "possible_incident": false,
+        "confidence": 0.95
+      },
+      "road_context": {
+        "speed_limit_mph": 30.0,
+        "traffic_speed_mph": 30.0,
+        "congestion_level": "low",
+        "road_grade_percent": 0.0,
+        "upcoming_stop_distance_m": null,
+        "incident_ahead": false
+      },
+      "road": "1st St"
+    }
+  ]
+}

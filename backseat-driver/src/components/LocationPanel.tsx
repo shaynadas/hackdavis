@@ -9,25 +9,38 @@ interface LocationPanelProps {
   isStreaming: boolean;
   permissionState: string;
   error: string | null;
+  simulationActive?: boolean;
+  onStartSimulation?: () => void;
+  onStopSimulation?: () => void;
 }
 
-export function LocationPanel({ 
-  location, 
-  gpsEnabled, 
-  setGpsEnabled, 
-  isStreaming, 
-  permissionState, 
-  error 
+export function LocationPanel({
+  location,
+  gpsEnabled,
+  setGpsEnabled,
+  isStreaming,
+  permissionState,
+  error,
+  simulationActive,
+  onStartSimulation,
+  onStopSimulation
 }: LocationPanelProps) {
-  
+
   const handleDemoSeed = async () => {
+    // Seed a single starting position so any panel that reads /location/latest
+    // has something immediately. Then hand off to the 2-min Davis simulator.
     await postLocationUpdate({
-      lat: 38.5449,
-      lon: -121.7405,
+      lat: 38.5440,
+      lon: -121.7438,
       speed_mph: 0,
-      heading_deg: 0,
-      accuracy_m: 20
+      heading_deg: 90,
+      accuracy_m: 5
     });
+    if (simulationActive) {
+      onStopSimulation?.();
+    } else {
+      onStartSimulation?.();
+    }
   };
 
   let statusText = "Stopped";
@@ -101,11 +114,17 @@ export function LocationPanel({
           </button>
         )}
         
-        <button 
+        <button
           onClick={handleDemoSeed}
-          className="col-span-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 py-1.5 rounded flex items-center justify-center gap-2 text-sm transition-colors"
+          className={`col-span-2 py-1.5 rounded flex items-center justify-center gap-2 text-sm transition-colors border ${
+            simulationActive
+              ? 'bg-blue-600/30 hover:bg-blue-600/40 text-blue-200 border-blue-700/60'
+              : 'bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border-transparent'
+          }`}
+          title="Plays a 2-min synthetic drive through downtown Davis and streams it to the backend"
         >
-          <Settings className="w-3.5 h-3.5" /> Seed Demo Location
+          <Settings className="w-3.5 h-3.5" />
+          {simulationActive ? 'Stop Simulated Drive' : 'Seed Demo Location'}
         </button>
       </div>
     </div>
