@@ -10,6 +10,7 @@ import time
 import threading
 import math
 import numpy as np
+import requests
 from collections import deque
 from dataclasses import dataclass
 from typing import Optional
@@ -20,6 +21,10 @@ try:
 except ImportError:
     ONNX_AVAILABLE = False
     print("[cv_pipeline] WARNING: onnxruntime not installed. Using mock output.")
+
+# ── Backend Integration ───────────────────────────────────────────────────────
+BACKEND_URL = "http://localhost:8000"
+PUSH_INTERVAL_MS = 500
 
 # ── Constants ──────────────────────────────────────────────────────────────────
 VEHICLE_CLASSES         = {2: "car", 3: "motorcycle", 5: "bus", 7: "truck"}
@@ -214,7 +219,7 @@ class YOLOOnnx:
         return detections
 
 
-# ── Classify (unchanged from your version) ────────────────────────────────────
+# ── Classify ──────────────────────────────────────────────────────────────────
 def classify_traffic(tracks: dict, frame_height: int) -> dict:
     roi_y = frame_height * 0.4
     vehicles    = [t for t in tracks.values() if t.cls in VEHICLE_CLASSES and t.centroid[1] >= roi_y]
@@ -250,7 +255,7 @@ def classify_traffic(tracks: dict, frame_height: int) -> dict:
         "lead_vehicle_status":     lead_status,
         "lead_vehicle_distance":   lead_distance,
         "stopped_vehicle_detected": stopped_count > 0,
-        "accident_detected":       accident,
+        "possible_incident":       accident,
         "hazard_detected":         hazard,
         "pedestrian_detected":     len(pedestrians) > 0,
         "confidence":              round(confidence, 2),
@@ -269,7 +274,7 @@ def _lead_status(lead: Optional[Track]) -> str:
         if early - late > BRAKING_SPEED_DROP:
             return "braking"
     if lead.speed_px_s < SLOW_SPEED_THRESHOLD:
-        return "slowing"
+        return "braking" # align with backend enum
     return "moving"
 
 
@@ -287,7 +292,7 @@ def _speed_series(history: deque) -> list:
 
 def _lead_distance(lead: Optional[Track], frame_height: int) -> str:
     if lead is None:
-        return "none"
+        return "far"
     y_frac = lead.centroid[1] / frame_height
     if y_frac > 0.75:
         return "close"
@@ -313,16 +318,20 @@ def _detect_accident(vehicles: list) -> bool:
 
 # ── Main Pipeline ─────────────────────────────────────────────────────────────
 class CVPipeline:
-    def __init__(self, source=0, use_mock=False, model_path="yolov8n.onnx"):
+    def __init__(self, source=0, use_mock=False, model_path="yolov8n.onnx", backend_url=BACKEND_URL, push_enabled=True):
         self.source   = source
         self.use_mock = use_mock or not ONNX_AVAILABLE
+        self.backend_url = backend_url
+        self.push_enabled = push_enabled
         self.tracker  = CentroidTracker()
         self.latest   = self._mock_result()
+        self.latest_frame_jpg = None
         self._running = False
         self._thread  = None
         self._lock    = threading.Lock()
         self.frame_count = 0
         self.last_detections = []
+        self._last_push = 0.0
 
         if not self.use_mock:
             print(f"[cv_pipeline] Loading ONNX model: {model_path}")
@@ -347,6 +356,26 @@ class CVPipeline:
     def get_result(self) -> dict:
         with self._lock:
             return dict(self.latest)
+
+    def _push_to_backend(self, result: dict):
+        if not self.push_enabled:
+            return
+        
+        now = time.time() * 1000  # ms
+        if now - self._last_push < PUSH_INTERVAL_MS:
+            return
+        
+        self._last_push = now
+        try:
+            resp = requests.post(
+                f"{self.backend_url}/perception/update",
+                json=result,
+                timeout=1.0
+            )
+            if resp.status_code != 200:
+                print(f"[cv_pipeline] Backend returned {resp.status_code}")
+        except requests.exceptions.RequestException as e:
+            print(f"[cv_pipeline] Failed to push to backend: {e}")
 
     def _loop(self):
         if self.use_mock:
@@ -382,8 +411,26 @@ class CVPipeline:
             tracks = self.tracker.update(self.last_detections)
             result = classify_traffic(tracks, frame.shape[0])
 
+            # Annotate frame
+            for tid, t in tracks.items():
+                x1, y1, x2, y2 = t.bbox
+                color = (0, 255, 0) if t.speed_px_s > STOPPED_SPEED_THRESHOLD else (0, 0, 255)
+                cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
+                label = f"ID:{tid} {t.speed_px_s:.1f}px/s"
+                cv2.putText(frame, label, (x1, max(0, y1 - 5)), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
+
+            state = result["traffic_state"]
+            cv2.putText(frame, f"State: {state}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 255, 0), 2)
+            cv2.putText(frame, f"Lead: {result['lead_vehicle_status']} ({result['lead_vehicle_distance']})", (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 0), 2)
+
+            ret_enc, buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 80])
+            jpg_bytes = buffer.tobytes() if ret_enc else None
+
             with self._lock:
                 self.latest = result
+                self.latest_frame_jpg = jpg_bytes
+
+            self._push_to_backend(result)
 
             self.frame_count += 1
             fps_count += 1
@@ -398,16 +445,28 @@ class CVPipeline:
 
     def _mock_loop(self):
         scenarios = [
-            {"traffic_state": "clear",    "lead_vehicle_status": "none",    "lead_vehicle_distance": "none",   "stopped_vehicle_detected": False, "accident_detected": False, "hazard_detected": False, "pedestrian_detected": False, "confidence": 0.88},
-            {"traffic_state": "moderate", "lead_vehicle_status": "moving",  "lead_vehicle_distance": "far",    "stopped_vehicle_detected": False, "accident_detected": False, "hazard_detected": False, "pedestrian_detected": False, "confidence": 0.72},
-            {"traffic_state": "slowing",  "lead_vehicle_status": "slowing", "lead_vehicle_distance": "medium", "stopped_vehicle_detected": False, "accident_detected": False, "hazard_detected": False, "pedestrian_detected": True,  "confidence": 0.76},
-            {"traffic_state": "slowing",  "lead_vehicle_status": "braking", "lead_vehicle_distance": "close",  "stopped_vehicle_detected": True,  "accident_detected": False, "hazard_detected": True,  "pedestrian_detected": False, "confidence": 0.82},
-            {"traffic_state": "stopped",  "lead_vehicle_status": "stopped", "lead_vehicle_distance": "close",  "stopped_vehicle_detected": True,  "accident_detected": False, "hazard_detected": True,  "pedestrian_detected": False, "confidence": 0.84},
+            {"traffic_state": "clear",    "lead_vehicle_status": "none",    "lead_vehicle_distance": "far",   "stopped_vehicle_detected": False, "possible_incident": False, "hazard_detected": False, "pedestrian_detected": False, "confidence": 0.88},
+            {"traffic_state": "moderate", "lead_vehicle_status": "moving",  "lead_vehicle_distance": "far",    "stopped_vehicle_detected": False, "possible_incident": False, "hazard_detected": False, "pedestrian_detected": False, "confidence": 0.72},
+            {"traffic_state": "slowing",  "lead_vehicle_status": "braking", "lead_vehicle_distance": "medium", "stopped_vehicle_detected": False, "possible_incident": False, "hazard_detected": False, "pedestrian_detected": True,  "confidence": 0.76},
+            {"traffic_state": "slowing",  "lead_vehicle_status": "braking", "lead_vehicle_distance": "close",  "stopped_vehicle_detected": True,  "possible_incident": False, "hazard_detected": True,  "pedestrian_detected": False, "confidence": 0.82},
+            {"traffic_state": "stopped",  "lead_vehicle_status": "stopped", "lead_vehicle_distance": "close",  "stopped_vehicle_detected": True,  "possible_incident": False, "hazard_detected": True,  "pedestrian_detected": False, "confidence": 0.84},
         ]
         i = 0
         while self._running:
+            scenario = dict(scenarios[i % len(scenarios)])
+            
+            frame = np.zeros((480, 640, 3), dtype=np.uint8)
+            cv2.putText(frame, "MOCK DATA MODE", (150, 240), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 0, 255), 3)
+            cv2.putText(frame, f"State: {scenario['traffic_state']}", (150, 300), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 255, 0), 2)
+            ret_enc, buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 80])
+            jpg_bytes = buffer.tobytes() if ret_enc else None
+
             with self._lock:
-                self.latest = dict(scenarios[i % len(scenarios)])
+                self.latest = scenario
+                self.latest_frame_jpg = jpg_bytes
+            
+            self._push_to_backend(scenario)
+
             i += 1
             time.sleep(3)
 
@@ -416,9 +475,9 @@ class CVPipeline:
         return {
             "traffic_state":            "clear",
             "lead_vehicle_status":      "none",
-            "lead_vehicle_distance":    "none",
+            "lead_vehicle_distance":    "far",
             "stopped_vehicle_detected": False,
-            "accident_detected":        False,
+            "possible_incident":        False,
             "hazard_detected":          False,
             "pedestrian_detected":      False,
             "confidence":               0.85,
@@ -429,16 +488,22 @@ class CVPipeline:
 try:
     from fastapi import FastAPI, Query
     from fastapi.middleware.cors import CORSMiddleware
+    from fastapi.responses import StreamingResponse
 
     app = FastAPI(title="Eco-Copilot CV Pipeline (Pi)")
     app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
     _pipeline: Optional[CVPipeline] = None
 
+    # Global config
+    GLOBAL_SOURCE = 0
+    GLOBAL_USE_MOCK = False
+    GLOBAL_PUSH_ENABLED = True
+
     @app.on_event("startup")
     async def startup():
         global _pipeline
-        _pipeline = CVPipeline(source=0, use_mock=False)
+        _pipeline = CVPipeline(source=GLOBAL_SOURCE, use_mock=GLOBAL_USE_MOCK, push_enabled=GLOBAL_PUSH_ENABLED)
         _pipeline.start()
 
     @app.on_event("shutdown")
@@ -462,6 +527,19 @@ try:
         _pipeline.start()
         return {"status": "ok", "source": path}
 
+    def generate_frames():
+        while True:
+            if _pipeline and _pipeline.latest_frame_jpg:
+                yield (b'--frame\r\n'
+                       b'Content-Type: image/jpeg\r\n\r\n' + _pipeline.latest_frame_jpg + b'\r\n')
+            else:
+                time.sleep(0.1)
+            time.sleep(0.05)
+
+    @app.get("/video_feed")
+    def video_feed():
+        return StreamingResponse(generate_frames(), media_type="multipart/x-mixed-replace; boundary=frame")
+
 except ImportError:
     print("[cv_pipeline] FastAPI not available.")
     app = None
@@ -470,17 +548,33 @@ except ImportError:
 # ── CLI ───────────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
     import sys
-    source   = sys.argv[1] if len(sys.argv) > 1 else "mock"
-    use_mock = source == "mock"
-    src      = 0 if source == "0" else source
+    import uvicorn
+    
+    source_arg = sys.argv[1] if len(sys.argv) > 1 and not sys.argv[1].startswith("--") else "mock"
+    push_enabled = "--no-push" not in sys.argv
+    use_mock = source_arg == "mock"
+    src = 0 if source_arg == "0" else source_arg
 
-    pipeline = CVPipeline(source=src, use_mock=use_mock)
-    pipeline.start()
-    try:
-        for _ in range(60):
-            print(json.dumps(pipeline.get_result()))
-            time.sleep(1)
-    except KeyboardInterrupt:
-        pass
-    finally:
-        pipeline.stop()
+    print(f"[cv_pipeline] Starting with source={source_arg}, push_enabled={push_enabled}")
+    print(f"[cv_pipeline] Backend URL: {BACKEND_URL}")
+    print("[cv_pipeline] Starting API on http://0.0.0.0:8001")
+    print("[cv_pipeline] Video feed available at http://localhost:8001/video_feed")
+
+    GLOBAL_SOURCE = src
+    GLOBAL_USE_MOCK = use_mock
+    GLOBAL_PUSH_ENABLED = push_enabled
+
+    if app:
+        uvicorn.run(app, host="0.0.0.0", port=8001)
+    else:
+        print("[cv_pipeline] FastAPI not installed. Cannot stream video or expose API.")
+        pipeline = CVPipeline(source=src, use_mock=use_mock, push_enabled=push_enabled)
+        pipeline.start()
+        try:
+            print("[cv_pipeline] Running in CLI mode only... Press Ctrl+C to stop.")
+            while True:
+                time.sleep(1)
+        except KeyboardInterrupt:
+            pass
+        finally:
+            pipeline.stop()
